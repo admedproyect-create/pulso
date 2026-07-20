@@ -511,6 +511,18 @@ const FMT_COLORS = {
 };
 const FMT_CYCLE = ["Reel", "Carrusel", "Historia", "Post"];
 const WEEK_DAYS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+const WEEK_FULL = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
+// ---------- datos de tu marca (aparecen en el pie del PDF) ----------
+// Edita esto con tus datos reales antes de enviar calendarios a clientes.
+const BRAND = {
+  name: "Pulso",
+  tagline: "Inteligencia de contenido",
+  site: "pulso-x2ws.vercel.app",
+  email: "",          // ej. "hola@tudominio.com"
+  phone: "",          // ej. "+57 300 000 0000"
+  legal: "Documento generado automáticamente por Pulso.",
+};
 const DAY_OPTIMAL = ["19:00", "08:00", "12:30", "19:30", "18:00", "11:00", "19:00"];
 const SEED_EVENTS = [
   { day: 0, time: "19:00", format: "Carrusel", title: "5 errores que frenan tu progreso" },
@@ -1238,6 +1250,7 @@ function Calendar({ events, addEvent, removeEvent, fillOptimal, clearAll, onEdit
   const total = events.length;
   const viral = events.filter((e) => isPeak(e.time)).length;
 
+  // Respaldo silencioso por si la librería de PDF no cargara.
   function exportCSV() {
     const rows = [["Dia", "Hora", "Formato", "Tema", "En_ventana_viral"]];
     [...events].sort((a, b) => a.day - b.day || a.time.localeCompare(b.time))
@@ -1249,6 +1262,146 @@ function Calendar({ events, addEvent, removeEvent, fillOptimal, clearAll, onEdit
     a.href = url; a.download = `calendario-${user || "pulso"}.csv`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  // ---------- Exportar el calendario como PDF con la marca Pulso ----------
+  async function exportPDF() {
+    let mod;
+    try { mod = await import("jspdf"); }
+    catch (_) { exportCSV(); return; }   // respaldo si la librería no está
+    const { jsPDF } = mod;
+
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const W = doc.internal.pageSize.getWidth();
+    const H = doc.internal.pageSize.getHeight();
+    const M = 42;
+
+    const rgb = (h) => { const n = parseInt(h.replace("#", ""), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+    const fill = (h) => doc.setFillColor(...rgb(h));
+    const ink = (h) => doc.setTextColor(...rgb(h));
+    const draw = (h) => doc.setDrawColor(...rgb(h));
+
+    const C = { ink: "#16161C", muted: "#6E6B78", line: "#E8E5DE", violet: "#5B3DF5", soft: "#EFEBFF", paper: "#FAF9F6", row: "#F4F2EE" };
+
+    const sorted = [...events].sort((a, b) => a.day - b.day || a.time.localeCompare(b.time));
+    const totalPosts = events.length;
+    const viralPosts = events.filter((e) => isPeak(e.time)).length;
+    const fecha = new Date().toLocaleDateString("es-CO", { day: "2-digit", month: "long", year: "numeric" });
+
+    function header() {
+      fill(C.violet); doc.roundedRect(M, 36, 24, 24, 7, 7, "F");
+      doc.setFillColor(255, 255, 255); doc.circle(M + 12, 48, 4.4, "F");
+      ink(C.ink); doc.setFont("helvetica", "bold"); doc.setFontSize(16);
+      doc.text(BRAND.name, M + 32, 49);
+      ink(C.muted); doc.setFont("helvetica", "normal"); doc.setFontSize(7.5);
+      doc.text(BRAND.tagline, M + 32, 58);
+      ink(C.muted); doc.setFontSize(9);
+      doc.text("Calendario de contenido", W - M, 49, { align: "right" });
+      draw(C.line); doc.setLineWidth(1); doc.line(M, 74, W - M, 74);
+    }
+
+    function footer(page, pages) {
+      const y = H - 62;
+      draw(C.line); doc.setLineWidth(1); doc.line(M, y, W - M, y);
+      fill(C.violet); doc.roundedRect(M, y + 10, 13, 13, 4, 4, "F");
+      doc.setFillColor(255, 255, 255); doc.circle(M + 6.5, y + 16.5, 2.4, "F");
+      ink(C.ink); doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+      doc.text(`${BRAND.name} · ${BRAND.tagline}`, M + 20, y + 20);
+      ink(C.muted); doc.setFont("helvetica", "normal"); doc.setFontSize(7.5);
+      const contacto = [BRAND.site, BRAND.email, BRAND.phone].filter(Boolean).join("   ·   ");
+      if (contacto) doc.text(contacto, M + 20, y + 31);
+      doc.text(BRAND.legal, M + 20, y + 41);
+      doc.text(`Generado el ${fecha}`, W - M, y + 31, { align: "right" });
+      doc.text(`Página ${page} de ${pages}`, W - M, y + 41, { align: "right" });
+    }
+
+    header();
+    let y = 100;
+
+    ink(C.ink); doc.setFont("helvetica", "bold"); doc.setFontSize(21);
+    doc.text("Calendario de contenido", M, y); y += 17;
+    ink(C.muted); doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+    doc.text(`@${user || "cuenta"}   ·   Plan semanal`, M, y); y += 22;
+
+    const boxW = (W - M * 2 - 16) / 3;
+    [[String(totalPosts), "publicaciones"], [String(viralPosts), "en ventana viral"], [WEEK_FULL[topDay], "mejor día"]]
+      .forEach((s, i) => {
+        const x = M + i * (boxW + 8);
+        fill(C.paper); draw(C.line); doc.setLineWidth(1);
+        doc.roundedRect(x, y, boxW, 46, 8, 8, "FD");
+        ink(i === 1 ? C.violet : C.ink); doc.setFont("helvetica", "bold"); doc.setFontSize(15);
+        doc.text(s[0], x + 12, y + 23);
+        ink(C.muted); doc.setFont("helvetica", "normal"); doc.setFontSize(8.5);
+        doc.text(s[1], x + 12, y + 36);
+      });
+    y += 62;
+
+    fill(C.soft); doc.roundedRect(M, y, W - M * 2, 36, 8, 8, "F");
+    ink(C.violet); doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+    doc.text("Ventana viral: 7:00 - 9:00 PM", M + 14, y + 15);
+    ink(C.muted); doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+    doc.text("Las publicaciones marcadas como VIRAL caen en la franja de mayor engagement de la cuenta.", M + 14, y + 27);
+    y += 52;
+
+    WEEK_FULL.forEach((dn, di) => {
+      const dayEvents = sorted.filter((e) => e.day === di);
+      const need = 26 + Math.max(dayEvents.length, 1) * 22 + 8;
+      if (y + need > H - 90) { doc.addPage(); header(); y = 100; }
+
+      const isTop = di === topDay;
+      fill(isTop ? C.soft : C.row);
+      doc.roundedRect(M, y, W - M * 2, 22, 5, 5, "F");
+      ink(isTop ? C.violet : C.ink); doc.setFont("helvetica", "bold"); doc.setFontSize(10);
+      doc.text(isTop ? `${dn}  ·  mejor día` : dn, M + 10, y + 15);
+      ink(C.muted); doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+      doc.text(`Hora óptima ${fmtTime(DAY_OPTIMAL[di])}`, W - M - 10, y + 15, { align: "right" });
+      y += 26;
+
+      if (!dayEvents.length) {
+        ink(C.muted); doc.setFont("helvetica", "italic"); doc.setFontSize(9);
+        doc.text("Sin publicaciones programadas", M + 12, y + 12);
+        y += 22;
+      } else {
+        dayEvents.forEach((e) => {
+          const c = FMT_COLORS[e.format] || FMT_COLORS.Post;
+          ink(C.ink); doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+          doc.text(fmtTime(e.time), M + 12, y + 13);
+
+          const label = String(e.format || "Post").toUpperCase();
+          doc.setFont("helvetica", "bold"); doc.setFontSize(7);
+          const bw = doc.getTextWidth(label) + 12;
+          fill(c.bg); doc.roundedRect(M + 74, y + 3, bw, 13, 3.5, 3.5, "F");
+          doc.setTextColor(255, 255, 255);
+          doc.text(label, M + 80, y + 12);
+
+          const tx = M + 74 + bw + 10;
+          const peak = isPeak(e.time);
+          const maxW = W - M - tx - (peak ? 58 : 14);
+          ink(C.ink); doc.setFont("helvetica", "normal"); doc.setFontSize(9.5);
+          const lines = doc.splitTextToSize(String(e.title || ""), Math.max(maxW, 60));
+          let linea = lines[0] || "";
+          if (lines.length > 1) linea = linea.replace(/\s+\S*$/, "") + "...";
+          doc.text(linea, tx, y + 13);
+
+          if (peak) {
+            doc.setFont("helvetica", "bold"); doc.setFontSize(6.5);
+            const vw = doc.getTextWidth("VIRAL") + 12;
+            fill(C.violet); doc.roundedRect(W - M - 12 - vw, y + 4, vw, 12, 3, 3, "F");
+            doc.setTextColor(255, 255, 255);
+            doc.text("VIRAL", W - M - 12 - vw + 6, y + 12.4);
+          }
+
+          draw("#F0EEE9"); doc.setLineWidth(0.5);
+          doc.line(M + 12, y + 20, W - M - 12, y + 20);
+          y += 22;
+        });
+      }
+      y += 8;
+    });
+
+    const pages = doc.getNumberOfPages();
+    for (let i = 1; i <= pages; i++) { doc.setPage(i); footer(i, pages); }
+    doc.save(`calendario-${user || "pulso"}.pdf`);
   }
 
   return (
@@ -1274,7 +1427,7 @@ function Calendar({ events, addEvent, removeEvent, fillOptimal, clearAll, onEdit
 
       <div className="cal-toolbar">
         <button className="primary" onClick={fillOptimal}>⚡ Llenar en horarios óptimos</button>
-        <button onClick={exportCSV}>⬇ Exportar CSV</button>
+        <button onClick={exportPDF}>⬇ Descargar PDF</button>
         <button onClick={clearAll}>Vaciar semana</button>
       </div>
 
