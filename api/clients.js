@@ -4,7 +4,7 @@ import { query } from "../lib/db.js";
 export default async function handler(req, res) {
   try {
     const r = await query(
-      `SELECT id, ig_user_id, username, account_type, followers_count, media_count, created_at
+      `SELECT id, ig_user_id, username, account_type, followers_count, media_count, niche, created_at
        FROM clients ORDER BY created_at DESC`
     );
     res.status(200).json({ clients: r.rows });

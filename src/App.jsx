@@ -360,6 +360,24 @@ const STYLE = `
 .brand-tag { font-family:'Space Mono'; font-size:10.5px; letter-spacing:.02em; color:var(--muted); margin-top:1px; }
 @media (max-width:560px){ .brand-tag { display:none; } }
 
+/* cuenta detectada por IA */
+.acct-box { background:linear-gradient(135deg,#F6F3FF,#FFF4F6); border:1.5px solid var(--violet); border-radius:16px; padding:18px 20px; margin:22px 0 6px; }
+.acct-box.analyzing { display:flex; align-items:center; gap:11px; font-size:14px; font-weight:500; color:var(--violet); background:var(--violet-soft); }
+.spin { width:15px; height:15px; border:2px solid rgba(91,61,245,.25); border-top-color:var(--violet); border-radius:50%; display:inline-block; animation:spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.acct-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.acct-ig { font-family:'Space Mono'; font-weight:700; font-size:13.5px; color:var(--ink); }
+.acct-tag { font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#fff; background:var(--violet); padding:3px 9px; border-radius:20px; }
+.acct-switch { margin-left:auto; display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--muted); cursor:pointer; font-weight:500; }
+.acct-switch input { width:15px; height:15px; accent-color:var(--violet); cursor:pointer; }
+.acct-niche { font-family:'Space Grotesk'; font-weight:700; font-size:22px; letter-spacing:-.02em; margin-top:9px; }
+.acct-sum { font-size:13.5px; color:#3a3845; margin-top:5px; max-width:70ch; }
+.acct-meta { display:flex; gap:20px; flex-wrap:wrap; margin-top:11px; font-size:12.5px; color:var(--muted); }
+.acct-meta b { color:var(--ink); font-weight:600; }
+.acct-temas { display:flex; gap:6px; flex-wrap:wrap; margin-top:11px; }
+.acct-temas span { font-size:11.5px; font-weight:500; background:#fff; border:1px solid var(--line); color:var(--ink); padding:4px 10px; border-radius:20px; }
+@media (prefers-reduced-motion: reduce){ .spin{ animation:none } }
+
 /* publicación */
 .pub-ok { background:#E5F8F4; color:#04695a; font-size:13px; font-weight:600; padding:11px 14px; border-radius:10px; }
 .pub-err { background:#FFE9ED; color:#a11231; font-size:13px; font-weight:600; padding:11px 14px; border-radius:10px; }
@@ -479,6 +497,8 @@ function mapClient(row, i) {
     name: row.username,
     initials: (row.username || "??").slice(0, 2).toUpperCase(),
     c1, c2, followers,
+    niche: row.niche || null,
+    real: true, // viene del backend: es una cuenta de Instagram conectada de verdad
   };
 }
 
@@ -609,6 +629,7 @@ export default function Pulso() {
         const mapped = data.clients.map(mapClient);
         setClients(mapped);
         setActiveClient(mapped[0]);
+        analyzeAccount(mapped[0]); // deduce el nicho de la cuenta real
       })
       .catch(() => { /* sin backend: se usan los datos demo */ });
 
@@ -625,12 +646,42 @@ export default function Pulso() {
     return () => { alive = false; };
   }, []);
 
-  function selectClient(client) { setActiveClient(client); setMode("owner"); setView("dashboard"); }
+  // Perfil de la cuenta detectado por IA (nicho, tono, audiencia, temas)
+  const [accountProfile, setAccountProfile] = useState(null);   // { username, nicho, categoria, audiencia, tono, temas, resumen }
+  const [analyzing, setAnalyzing] = useState(false);
+  const analyzedFor = React.useRef(null);
+
+  // Analiza una cuenta real conectada para deducir su nicho.
+  async function analyzeAccount(client) {
+    if (!client || !client.real || analyzedFor.current === client.id) return;
+    analyzedFor.current = client.id;
+    setAnalyzing(true);
+    setAccountProfile(null);
+    try {
+      const r = await fetch(`/api/analyze-account?client_id=${encodeURIComponent(client.id)}`);
+      if (!r.ok) throw new Error("fallo");
+      const d = await r.json();
+      setAccountProfile({ username: d.cuenta?.username || client.handle, ...(d.perfil || {}) });
+    } catch (_) {
+      analyzedFor.current = null; // permite reintentar más tarde
+    } finally {
+      setAnalyzing(false);
+    }
+  }
+
+  function selectClient(client) {
+    setActiveClient(client);
+    setMode("owner");
+    setView("dashboard");
+    if (client?.real) analyzeAccount(client);
+    else setAccountProfile(null);
+  }
   function analyzeCompetitor(handle) {
     const h = handle.replace(/^@/, "").trim();
     if (!h) return;
     setActiveClient({ id: "comp", handle: h, name: h, initials: h.slice(0, 2).toUpperCase(), c1: "#6E6B78", c2: "#B7B4BF" });
     setMode("competitor");
+    setAccountProfile(null);
     setView("dashboard");
   }
   function simulateConnect() {
@@ -710,7 +761,7 @@ export default function Pulso() {
 
         {view === "connect" && <ConnectHub clients={clients} onConnect={() => setConnectOpen(true)} onSelect={selectClient} onCompetitor={analyzeCompetitor} openLead={openLead} connectedInfo={connectedInfo} onDismissBanner={() => setConnectedInfo(null)} />}
         {view === "dashboard" && <Dashboard client={activeClient} mode={mode} goGen={() => setView("generator")} goCal={() => setView("calendar")} openLead={openLead} goConnect={() => setView("connect")} />}
-        {view === "generator" && <Generator scheduleIdea={scheduleIdea} goCal={() => setView("calendar")} openLead={openLead} />}
+        {view === "generator" && <Generator scheduleIdea={scheduleIdea} goCal={() => setView("calendar")} openLead={openLead} accountProfile={accountProfile} analyzing={analyzing} activeClient={activeClient} mode={mode} />}
         {view === "calendar" && <Calendar events={events} addEvent={addEvent} removeEvent={removeEvent} fillOptimal={fillOptimal} clearAll={clearAll} onEdit={setEditing} openLead={openLead} user={activeClient?.handle} />}
 
         <div className="foot">Pulso · prototipo de demostración · Las métricas mostradas son datos de ejemplo</div>
@@ -995,7 +1046,7 @@ function CompetitorView({ cl, goConnect, openLead }) {
 }
 
 // ---------- generator ----------
-function Generator({ scheduleIdea, goCal, openLead }) {
+function Generator({ scheduleIdea, goCal, openLead, accountProfile, analyzing, activeClient, mode }) {
   const [niche, setNiche] = useState("Fitness");
   const [audience, setAudience] = useState("");
   const [goal, setGoal] = useState("Crecer seguidores");
@@ -1003,6 +1054,18 @@ function Generator({ scheduleIdea, goCal, openLead }) {
   const [error, setError] = useState("");
   const [ideas, setIdeas] = useState([]);
   const [scheduled, setScheduled] = useState({});
+  // Si hay cuenta real analizada, generamos para ELLA (no por nicho genérico)
+  const [useAccount, setUseAccount] = useState(true);
+
+  const hasAccount = !!(accountProfile && mode === "owner");
+  const forAccount = hasAccount && useAccount;
+
+  // Cuando la IA detecta el nicho de la cuenta, preselecciona la categoría y la audiencia.
+  useEffect(() => {
+    if (!accountProfile) return;
+    if (accountProfile.categoria && NICHES.includes(accountProfile.categoria)) setNiche(accountProfile.categoria);
+    if (accountProfile.audiencia) setAudience(accountProfile.audiencia);
+  }, [accountProfile]);
 
   const DAY_NAMES = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
   function handleSchedule(idea, i) { setScheduled((p) => ({ ...p, [i]: scheduleIdea(idea) })); }
@@ -1016,7 +1079,7 @@ function Generator({ scheduleIdea, goCal, openLead }) {
         const r = await fetch("/api/generar", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ niche, audience, goal }),
+          body: JSON.stringify({ niche, audience, goal, account: forAccount ? accountProfile : null }),
         });
         if (r.ok) {
           const d = await r.json();
@@ -1053,9 +1116,39 @@ Las ideas deben ser específicas y accionables, no genéricas. Varía los format
   return (
     <>
       <div className="gen-head">
-        <h1>Ideas de contenido por nicho</h1>
-        <p>Elige el nicho del cliente y obtén ideas listas para usar — con gancho, caption, hashtags y las plataformas donde mejor funciona cada una.</p>
+        <h1>{forAccount ? "Ideas para esta cuenta" : "Ideas de contenido por nicho"}</h1>
+        <p>{forAccount
+          ? "Ideas hechas a la medida de la cuenta conectada — según su nicho real, su tono y su audiencia."
+          : "Elige el nicho del cliente y obtén ideas listas para usar — con gancho, caption, hashtags y las plataformas donde mejor funciona cada una."}</p>
       </div>
+
+      {analyzing && (
+        <div className="acct-box analyzing">
+          <span className="spin" /> Analizando la cuenta conectada para detectar su nicho…
+        </div>
+      )}
+
+      {hasAccount && !analyzing && (
+        <div className="acct-box">
+          <div className="acct-top">
+            <span className="acct-ig">@{accountProfile.username}</span>
+            <span className="acct-tag">Nicho detectado</span>
+            <label className="acct-switch">
+              <input type="checkbox" checked={useAccount} onChange={(e) => setUseAccount(e.target.checked)} />
+              <span>Personalizar para esta cuenta</span>
+            </label>
+          </div>
+          <div className="acct-niche">{accountProfile.nicho || accountProfile.categoria}</div>
+          {accountProfile.resumen && <div className="acct-sum">{accountProfile.resumen}</div>}
+          <div className="acct-meta">
+            {accountProfile.audiencia && <span><b>Audiencia:</b> {accountProfile.audiencia}</span>}
+            {accountProfile.tono && <span><b>Tono:</b> {accountProfile.tono}</span>}
+          </div>
+          {Array.isArray(accountProfile.temas) && accountProfile.temas.length > 0 && (
+            <div className="acct-temas">{accountProfile.temas.map((t, i) => <span key={i}>{t}</span>)}</div>
+          )}
+        </div>
+      )}
 
       <div className="niche-row">
         {NICHES.map((n) => <button key={n} className={`chip ${niche === n ? "on" : ""}`} onClick={() => setNiche(n)}>{n}</button>)}
