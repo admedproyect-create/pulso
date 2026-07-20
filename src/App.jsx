@@ -498,7 +498,7 @@ const STYLE = `
 .hero-aurora .a1 { width:300px;height:300px; background:#5B3DF5; left:0; top:0; animation:drift 15s ease-in-out infinite; }
 .hero-aurora .a2 { width:250px;height:250px; background:#FF4D6D; left:240px; top:40px; animation:drift 19s ease-in-out infinite reverse; }
 .hero-aurora .a3 { width:210px;height:210px; background:#00B596; left:130px; top:130px; animation:drift 22s ease-in-out infinite; }
-.hero > * { position:relative; z-index:1; }
+.hero-grid { position:relative; z-index:1; }
 
 .hero-grid { display:grid; grid-template-columns:1.05fr .95fr; gap:34px; align-items:center; }
 .hero-visual { position:relative; display:flex; justify-content:center; align-items:center; min-height:340px; }
