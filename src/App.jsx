@@ -56,8 +56,8 @@ const STYLE = `
 .top-cta:hover { background:#4b30d8; }
 
 /* ---------- connect screen ---------- */
-.hero { padding: 70px 0 40px; }
-.hero h1 { font-family:'Space Grotesk'; font-weight:700; font-size: clamp(34px, 6vw, 56px); line-height:1.02; letter-spacing:-.035em; max-width:15ch; }
+.hero { padding: 48px 0 40px; }
+.hero h1 { font-family:'Space Grotesk'; font-weight:700; font-size: clamp(30px, 4.2vw, 45px); line-height:1.06; letter-spacing:-.032em; max-width:19ch; }
 .hero h1 em { font-style:normal; color:var(--violet); }
 .hero p { color:var(--muted); font-size:17px; max-width:46ch; margin-top:20px; }
 
@@ -362,7 +362,7 @@ const STYLE = `
 
 /* ===================== auditoría instantánea ===================== */
 @keyframes segIn { from { opacity:0; transform: scale(.86); } to { opacity:1; transform:none; } }
-.seg-in { animation: segIn .45s cubic-bezier(.2,.8,.3,1) both; transform-origin: 115px 115px; }
+.seg-in { animation: segIn .45s cubic-bezier(.2,.8,.3,1) both; transform-origin: 126px 126px; }
 @keyframes pulseDot { 0%,100%{ box-shadow:0 0 0 0 rgba(0,181,150,.55) } 70%{ box-shadow:0 0 0 7px rgba(0,181,150,0) } }
 .dot-live { width:7px; height:7px; border-radius:50%; background:var(--teal); display:inline-block; animation:pulseDot 2s infinite; }
 
@@ -373,7 +373,7 @@ const STYLE = `
 .aud-field input { flex:1; border:0; outline:0; font:inherit; font-size:16.5px; padding:14px 8px; background:transparent; min-width:0; }
 .aud-field button { font:inherit; font-weight:700; font-size:15px; border:0; cursor:pointer; white-space:nowrap; padding:13px 22px; border-radius:10px; background:var(--violet); color:#fff; }
 .aud-field button:hover { background:#4b30d8; }
-.aud-field button:disabled { background:#C9C4D6; cursor:default; }
+.aud-field button:disabled { background:var(--violet); opacity:.42; cursor:default; }
 .aud-note { display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--muted); margin-top:12px; font-weight:500; }
 
 .aud-head { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
@@ -504,7 +504,7 @@ const STYLE = `
 .hero-visual { position:relative; display:flex; justify-content:center; align-items:center; min-height:340px; }
 .glass { background:rgba(255,255,255,.74); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.9); border-radius:26px; box-shadow:0 26px 64px rgba(91,61,245,.20); padding:20px 20px 8px; }
 .hero-clockcard { text-align:center; animation:floaty 6s ease-in-out infinite; }
-.hero-clockcard .cc-lab { font-family:'Space Mono'; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--violet); margin-bottom:2px; }
+.hero-clockcard .cc-lab { font-family:'Space Mono'; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--violet); margin-bottom:10px; }
 .float-chip { position:absolute; background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px 13px; box-shadow:0 14px 34px rgba(0,0,0,.12); font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; white-space:nowrap; }
 .float-chip .fdot { width:9px;height:9px;border-radius:50%; }
 .fc-1 { top:2px; right:-6px; animation:floaty 5s ease-in-out infinite; }
@@ -652,7 +652,7 @@ function CountUp({ to, prefix = "", suffix = "", duration = 1400 }) {
 
 // ---------- radial clock ----------
 function RadialClock({ animate = false }) {
-  const size = 230, cx = size / 2, cy = size / 2;
+  const size = 252, cx = size / 2, cy = size / 2;
   const rOuter = 104, rInner = 58;
   const max = Math.max(...HOURLY);
   const seg = (h) => {
