@@ -360,6 +360,95 @@ const STYLE = `
 .brand-tag { font-family:'Space Mono'; font-size:10.5px; letter-spacing:.02em; color:var(--muted); margin-top:1px; }
 @media (max-width:560px){ .brand-tag { display:none; } }
 
+/* ===================== auditoría instantánea ===================== */
+@keyframes segIn { from { opacity:0; transform: scale(.86); } to { opacity:1; transform:none; } }
+.seg-in { animation: segIn .45s cubic-bezier(.2,.8,.3,1) both; transform-origin: 115px 115px; }
+@keyframes pulseDot { 0%,100%{ box-shadow:0 0 0 0 rgba(0,181,150,.55) } 70%{ box-shadow:0 0 0 7px rgba(0,181,150,0) } }
+.dot-live { width:7px; height:7px; border-radius:50%; background:var(--teal); display:inline-block; animation:pulseDot 2s infinite; }
+
+.aud-box { margin-top:28px; max-width:560px; }
+.aud-box.open { background:var(--card); border:1.5px solid var(--line); border-radius:18px; padding:20px; max-width:620px; box-shadow:0 14px 40px rgba(22,22,28,.07); }
+.aud-field { display:flex; align-items:center; background:#fff; border:2px solid var(--violet); border-radius:14px; padding:5px 5px 5px 16px; box-shadow:0 10px 30px rgba(91,61,245,.16); }
+.aud-field .at { font-family:'Space Mono'; color:var(--muted); font-size:17px; }
+.aud-field input { flex:1; border:0; outline:0; font:inherit; font-size:16.5px; padding:14px 8px; background:transparent; min-width:0; }
+.aud-field button { font:inherit; font-weight:700; font-size:15px; border:0; cursor:pointer; white-space:nowrap; padding:13px 22px; border-radius:10px; background:var(--violet); color:#fff; }
+.aud-field button:hover { background:#4b30d8; }
+.aud-field button:disabled { background:#C9C4D6; cursor:default; }
+.aud-note { display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--muted); margin-top:12px; font-weight:500; }
+
+.aud-head { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
+.aud-handle { font-family:'Space Mono'; font-weight:700; font-size:14px; }
+.aud-back { margin-left:auto; font:inherit; font-size:12.5px; border:0; background:transparent; color:var(--violet); cursor:pointer; font-weight:600; }
+.aud-back:hover { text-decoration:underline; }
+.aud-q { margin-top:15px; }
+.aud-q label { display:block; font-size:12.5px; font-weight:600; color:var(--muted); margin-bottom:8px; }
+.aud-chips { display:flex; flex-wrap:wrap; gap:7px; }
+.aud-chip { font:inherit; font-size:12.5px; font-weight:500; border:1.5px solid var(--line); background:#fff; cursor:pointer; padding:7px 13px; border-radius:20px; color:var(--ink); transition:all .12s; }
+.aud-chip:hover { border-color:var(--violet); }
+.aud-chip.on { background:var(--violet); color:#fff; border-color:var(--violet); }
+.aud-chip:disabled { opacity:.5; cursor:default; }
+.aud-go { width:100%; margin-top:20px; font:inherit; font-weight:700; font-size:15.5px; border:0; cursor:pointer; padding:15px; border-radius:12px; background:var(--violet); color:#fff; box-shadow:0 8px 26px rgba(91,61,245,.3); }
+.aud-go:hover { background:#4b30d8; }
+.aud-go:disabled { background:#EDEBF5; color:var(--muted); box-shadow:none; cursor:default; }
+.aud-loading { display:flex; align-items:center; gap:14px; padding:26px 4px; }
+.aud-loading b { display:block; font-size:15px; font-family:'Space Grotesk'; font-weight:600; }
+.aud-loading span { font-size:12.5px; color:var(--muted); }
+
+/* resultado */
+.aud-result { margin-top:26px; background:var(--card); border:1.5px solid var(--violet); border-radius:20px; padding:24px; box-shadow:0 20px 55px rgba(91,61,245,.14); animation:reveal .5s ease both; }
+.aud-res-top { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+.aud-res-lab { font-family:'Space Mono'; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--violet); }
+.aud-res-top h3 { font-family:'Space Grotesk'; font-weight:700; font-size:24px; letter-spacing:-.02em; margin-top:5px; }
+.aud-res-top p { font-size:14px; color:#3a3845; margin-top:7px; max-width:56ch; }
+.aud-win { display:flex; gap:12px; align-items:flex-start; background:var(--ink); color:#fff; border-radius:14px; padding:15px 18px; margin-top:20px; }
+.aud-win-ico { font-size:19px; }
+.aud-win b { font-family:'Space Grotesk'; font-weight:600; font-size:14px; }
+.aud-win p { font-size:13.5px; color:rgba(255,255,255,.78); margin-top:3px; }
+.aud-cols { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:22px; }
+.aud-col-h { font-family:'Space Grotesk'; font-weight:600; font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+.aud-item { display:flex; gap:11px; align-items:flex-start; margin-bottom:14px; }
+.aud-item b { font-size:14px; font-weight:600; display:block; }
+.aud-item p { font-size:12.5px; color:var(--muted); margin-top:3px; }
+.aud-imp { font-size:9px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#fff; padding:3px 7px; border-radius:5px; flex-shrink:0; margin-top:2px; }
+.aud-num { width:20px; height:20px; border-radius:6px; background:var(--violet-soft); color:var(--violet); font-family:'Space Grotesk'; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.aud-time { margin-top:6px; background:var(--violet-soft); border-radius:13px; padding:14px 17px; }
+.aud-time span { font-size:11px; font-family:'Space Mono'; letter-spacing:.08em; text-transform:uppercase; color:var(--violet); }
+.aud-time b { display:block; font-family:'Space Grotesk'; font-weight:700; font-size:17px; margin-top:4px; }
+.aud-time p { font-size:12.5px; color:var(--muted); margin-top:3px; }
+.aud-cta { display:flex; gap:20px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin-top:22px; padding-top:20px; border-top:1px dashed var(--line); }
+.aud-cta b { font-family:'Space Grotesk'; font-weight:600; font-size:15.5px; }
+.aud-cta p { font-size:13px; color:var(--muted); margin-top:5px; max-width:48ch; }
+.aud-cta-btns { display:flex; gap:9px; flex-wrap:wrap; }
+.aud-2nd { font:inherit; font-weight:600; font-size:14px; cursor:pointer; border:1.5px solid var(--line); background:#fff; color:var(--ink); border-radius:11px; padding:13px 18px; }
+.aud-2nd:hover { border-color:var(--violet); color:var(--violet); }
+.aud-again { margin-top:16px; font:inherit; font-size:13px; font-weight:600; border:0; background:transparent; color:var(--muted); cursor:pointer; padding:0; }
+.aud-again:hover { color:var(--violet); }
+
+/* demo en vivo */
+.demo-box { display:grid; grid-template-columns:.85fr 1.15fr; gap:22px; background:var(--card); border:1px solid var(--line); border-radius:20px; padding:24px; align-items:start; }
+.demo-left b { font-family:'Space Grotesk'; font-weight:600; font-size:18px; letter-spacing:-.01em; }
+.demo-left p { font-size:13.5px; color:var(--muted); margin-top:8px; }
+.demo-chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:16px; }
+.demo-card { background:#FAF9F6; border:1px solid var(--line); border-radius:15px; padding:18px; min-height:190px; }
+.demo-card.live { border-color:var(--violet); background:#fff; animation:reveal .45s ease both; }
+.demo-card.empty { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:var(--muted); gap:8px; }
+.demo-card.empty span { font-size:26px; }
+.demo-card.empty p { font-size:13px; max-width:24ch; }
+.demo-badge { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; background:var(--violet); color:#fff; padding:3px 9px; border-radius:6px; }
+.demo-card h4 { font-family:'Space Grotesk'; font-weight:600; font-size:17px; letter-spacing:-.01em; margin-top:9px; }
+.demo-hook { font-size:14px; font-weight:500; margin-top:9px; }
+.demo-cap { font-size:12.5px; color:#3a3845; margin-top:10px; white-space:pre-wrap; max-height:120px; overflow:hidden; }
+.demo-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:11px; }
+.demo-tags span { font-size:11px; font-family:'Space Mono'; color:var(--violet); background:var(--violet-soft); padding:3px 8px; border-radius:5px; }
+
+@media (max-width:820px){
+  .aud-cols { grid-template-columns:1fr; }
+  .demo-box { grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion: reduce){
+  .seg-in, .dot-live, .aud-result, .demo-card.live { animation:none }
+}
+
 /* cuenta detectada por IA */
 .acct-box { background:linear-gradient(135deg,#F6F3FF,#FFF4F6); border:1.5px solid var(--violet); border-radius:16px; padding:18px 20px; margin:22px 0 6px; }
 .acct-box.analyzing { display:flex; align-items:center; gap:11px; font-size:14px; font-weight:500; color:var(--violet); background:var(--violet-soft); }
@@ -543,8 +632,26 @@ function isPeak(t) {
   return h >= 19 && h < 21; // ventana viral: 7-9 PM
 }
 
+// ---------- contador animado ----------
+function CountUp({ to, prefix = "", suffix = "", duration = 1400 }) {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    let raf, start;
+    const step = (t) => {
+      if (!start) start = t;
+      const p = Math.min((t - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(Math.round(to * eased));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [to, duration]);
+  return <>{prefix}{n}{suffix}</>;
+}
+
 // ---------- radial clock ----------
-function RadialClock() {
+function RadialClock({ animate = false }) {
   const size = 230, cx = size / 2, cy = size / 2;
   const rOuter = 104, rInner = 58;
   const max = Math.max(...HOURLY);
@@ -566,7 +673,17 @@ function RadialClock() {
   };
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Mejores horas para publicar">
-      {HOURLY.map((v, h) => <path key={h} d={seg(h)} fill={color(v)} stroke="#fff" strokeWidth="1.2" />)}
+      {HOURLY.map((v, h) => (
+        <path
+          key={h}
+          d={seg(h)}
+          fill={color(v)}
+          stroke="#fff"
+          strokeWidth="1.2"
+          className={animate ? "seg-in" : ""}
+          style={animate ? { animationDelay: `${h * 0.035}s` } : undefined}
+        />
+      ))}
       {[0, 6, 12, 18].map((h) => {
         const a = (h / 24) * 2 * Math.PI - Math.PI / 2;
         const x = cx + (rOuter + 14) * Math.cos(a), y = cy + (rOuter + 14) * Math.sin(a);
@@ -579,13 +696,28 @@ function RadialClock() {
   );
 }
 
-function ScoreRing({ score }) {
-  const r = 34, c = 2 * Math.PI * r, off = c - (score / 100) * c;
+function ScoreRing({ score, animate = false, size = 90 }) {
+  const r = 34, c = 2 * Math.PI * r;
+  const [shown, setShown] = useState(animate ? 0 : score);
+  useEffect(() => {
+    if (!animate) { setShown(score); return; }
+    let raf, start;
+    const step = (t) => {
+      if (!start) start = t;
+      const p = Math.min((t - start) / 1200, 1);
+      setShown(Math.round(score * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [score, animate]);
+  const off = c - (shown / 100) * c;
+  const col = shown >= 70 ? "#00B596" : shown >= 50 ? "#5B3DF5" : "#FF4D6D";
   return (
-    <svg width="90" height="90" viewBox="0 0 90 90" style={{ flexShrink: 0 }}>
+    <svg width={size} height={size} viewBox="0 0 90 90" style={{ flexShrink: 0 }}>
       <circle cx="45" cy="45" r={r} fill="none" stroke="#EEEBE4" strokeWidth="9" />
-      <circle cx="45" cy="45" r={r} fill="none" stroke="var(--violet)" strokeWidth="9" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={off} transform="rotate(-90 45 45)" />
-      <text x="45" y="50" textAnchor="middle" fontFamily="Space Grotesk" fontWeight="700" fontSize="24" fill="#16161C">{score}</text>
+      <circle cx="45" cy="45" r={r} fill="none" stroke={animate ? col : "var(--violet)"} strokeWidth="9" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={off} transform="rotate(-90 45 45)" />
+      <text x="45" y="50" textAnchor="middle" fontFamily="Space Grotesk" fontWeight="700" fontSize="24" fill="#16161C">{shown}</text>
     </svg>
   );
 }
@@ -791,6 +923,266 @@ export default function Pulso() {
 }
 
 // ---------- connect hub / landing ----------
+// ---------- auditoría instantánea (sin conectar cuenta) ----------
+const AUD_FREQ = ["Menos de 1 vez/semana", "1-2 por semana", "3-5 por semana", "A diario"];
+const AUD_FMT = ["Reels", "Carruseles", "Fotos", "Historias"];
+const AUD_LOADING = [
+  "Revisando tu perfil…",
+  "Comparando con cuentas de tu nicho…",
+  "Detectando qué frena tu alcance…",
+  "Preparando tu diagnóstico…",
+];
+
+function InstantAudit({ openLead, onConnect }) {
+  const [step, setStep] = useState("form"); // form | q | loading | result
+  const [handle, setHandle] = useState("");
+  const [nicho, setNicho] = useState("");
+  const [freq, setFreq] = useState("");
+  const [fmt, setFmt] = useState("");
+  const [res, setRes] = useState(null);
+  const [err, setErr] = useState("");
+  const [msg, setMsg] = useState(0);
+  const resultRef = React.useRef(null);
+
+  useEffect(() => {
+    if (step !== "loading") return;
+    const t = setInterval(() => setMsg((m) => (m + 1) % AUD_LOADING.length), 1800);
+    return () => clearInterval(t);
+  }, [step]);
+
+  useEffect(() => {
+    if (step === "result" && resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [step]);
+
+  async function run() {
+    setStep("loading"); setErr(""); setMsg(0);
+    try {
+      const r = await fetch("/api/auditoria", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ handle: handle.replace(/^@/, ""), nicho, frecuencia: freq, formato: fmt, objetivo: "crecer" }),
+      });
+      if (!r.ok) throw new Error("fallo");
+      const d = await r.json();
+      setRes(d); setStep("result");
+    } catch (_) {
+      setErr("No pudimos completar la auditoría. Inténtalo de nuevo en un momento.");
+      setStep("q");
+    }
+  }
+
+  function reset() { setStep("form"); setRes(null); setHandle(""); setNicho(""); setFreq(""); setFmt(""); }
+
+  // --- paso 1: usuario ---
+  if (step === "form") {
+    return (
+      <div className="aud-box">
+        <div className="aud-field">
+          <span className="at">@</span>
+          <input
+            value={handle}
+            onChange={(e) => setHandle(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handle.trim() && setStep("q")}
+            placeholder="tu_usuario"
+            aria-label="Tu usuario de Instagram"
+          />
+          <button disabled={!handle.trim()} onClick={() => setStep("q")}>Auditar gratis</button>
+        </div>
+        <div className="aud-note">
+          <span className="dot-live" /> Resultado en 30 segundos · No pedimos contraseña ni permisos
+        </div>
+      </div>
+    );
+  }
+
+  // --- paso 2: 3 preguntas rápidas ---
+  if (step === "q" || step === "loading") {
+    const ready = nicho && freq && fmt;
+    return (
+      <div className="aud-box open">
+        <div className="aud-head">
+          <span className="aud-handle">@{handle.replace(/^@/, "")}</span>
+          <button className="aud-back" onClick={reset}>cambiar</button>
+        </div>
+
+        {step === "loading" ? (
+          <div className="aud-loading">
+            <span className="spin" />
+            <div>
+              <b>{AUD_LOADING[msg]}</b>
+              <span>Analizando con inteligencia artificial</span>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="aud-q">
+              <label>1 · ¿De qué es tu cuenta?</label>
+              <div className="aud-chips">
+                {NICHES.map((n) => (
+                  <button key={n} className={`aud-chip ${nicho === n ? "on" : ""}`} onClick={() => setNicho(n)}>{n}</button>
+                ))}
+              </div>
+            </div>
+            <div className="aud-q">
+              <label>2 · ¿Cada cuánto publicas?</label>
+              <div className="aud-chips">
+                {AUD_FREQ.map((f) => (
+                  <button key={f} className={`aud-chip ${freq === f ? "on" : ""}`} onClick={() => setFreq(f)}>{f}</button>
+                ))}
+              </div>
+            </div>
+            <div className="aud-q">
+              <label>3 · ¿Qué formato usas más?</label>
+              <div className="aud-chips">
+                {AUD_FMT.map((f) => (
+                  <button key={f} className={`aud-chip ${fmt === f ? "on" : ""}`} onClick={() => setFmt(f)}>{f}</button>
+                ))}
+              </div>
+            </div>
+            {err && <div className="err" style={{ marginTop: 14 }}>{err}</div>}
+            <button className="aud-go" disabled={!ready} onClick={run}>
+              {ready ? "Ver mi diagnóstico →" : "Elige las 3 opciones"}
+            </button>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  // --- paso 3: resultado ---
+  const score = Math.max(0, Math.min(100, Number(res?.puntaje) || 60));
+  const impactColor = { alto: "var(--coral)", medio: "var(--amber)", bajo: "var(--teal)" };
+  return (
+    <div className="aud-result" ref={resultRef}>
+      <div className="aud-res-top">
+        <ScoreRing score={score} animate size={112} />
+        <div>
+          <div className="aud-res-lab">Diagnóstico de @{handle.replace(/^@/, "")}</div>
+          <h3>{res.veredicto}</h3>
+          <p>{res.diagnostico}</p>
+        </div>
+      </div>
+
+      {res.quick_win && (
+        <div className="aud-win">
+          <span className="aud-win-ico">⚡</span>
+          <div><b>Cámbialo mañana mismo</b><p>{res.quick_win}</p></div>
+        </div>
+      )}
+
+      <div className="aud-cols">
+        <div className="aud-col">
+          <div className="aud-col-h">Qué te está frenando</div>
+          {(res.errores || []).map((e, i) => (
+            <div className="aud-item" key={i}>
+              <span className="aud-imp" style={{ background: impactColor[e.impacto] || "var(--muted)" }}>{e.impacto}</span>
+              <div><b>{e.titulo}</b><p>{e.detalle}</p></div>
+            </div>
+          ))}
+        </div>
+        <div className="aud-col">
+          <div className="aud-col-h">Qué hacer esta semana</div>
+          {(res.acciones || []).map((a, i) => (
+            <div className="aud-item" key={i}>
+              <span className="aud-num">{i + 1}</span>
+              <div><b>{a.accion}</b><p>{a.resultado}</p></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {res.mejor_momento && (
+        <div className="aud-time">
+          <span>Tu mejor momento estimado</span>
+          <b>{res.mejor_momento.dia} · {res.mejor_momento.franja}</b>
+          <p>{res.mejor_momento.razon}</p>
+        </div>
+      )}
+
+      <div className="aud-cta">
+        <div>
+          <b>Esto es lo que se ve sin conectar tu cuenta.</b>
+          <p>Con tus datos reales de Instagram sabrás tu hora exacta, tu alcance real y qué publicaciones te están funcionando de verdad.</p>
+        </div>
+        <div className="aud-cta-btns">
+          <button className="gen-btn" onClick={() => openLead("Auditoría Express")}>Quiero mi auditoría completa</button>
+          <button className="aud-2nd" onClick={onConnect}>Conectar Instagram</button>
+        </div>
+      </div>
+
+      <button className="aud-again" onClick={reset}>← Auditar otra cuenta</button>
+    </div>
+  );
+}
+
+// ---------- demo en vivo del generador ----------
+const DEMO_NICHES = ["Gastronomía", "Fitness", "Moda", "Inmobiliaria", "Belleza"];
+
+function LiveDemo() {
+  const [n, setN] = useState("Gastronomía");
+  const [loading, setLoading] = useState(false);
+  const [idea, setIdea] = useState(null);
+  const [err, setErr] = useState("");
+
+  async function go(nicho) {
+    setN(nicho); setLoading(true); setErr(""); setIdea(null);
+    try {
+      const r = await fetch("/api/generar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ niche: nicho, goal: "Crecer seguidores" }),
+      });
+      if (!r.ok) throw new Error("fallo");
+      const d = await r.json();
+      setIdea((d.ideas || [])[0] || null);
+    } catch (_) {
+      setErr("No se pudo generar ahora mismo. Inténtalo de nuevo.");
+    } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="demo-box">
+      <div className="demo-left">
+        <b>Elige un nicho y mira a la IA trabajar</b>
+        <p>Esto es exactamente lo que Pulso genera para cada cliente: gancho, caption y hashtags listos para publicar.</p>
+        <div className="demo-chips">
+          {DEMO_NICHES.map((x) => (
+            <button key={x} className={`aud-chip ${n === x ? "on" : ""}`} onClick={() => go(x)} disabled={loading}>{x}</button>
+          ))}
+        </div>
+      </div>
+      <div className="demo-right">
+        {loading && (
+          <div className="demo-card">
+            <div className="skel" style={{ height: 16, width: "70%" }} />
+            <div className="skel" style={{ height: 12, width: "95%", marginTop: 12 }} />
+            <div className="skel" style={{ height: 12, width: "85%", marginTop: 7 }} />
+            <div className="skel" style={{ height: 40, width: "100%", marginTop: 14 }} />
+          </div>
+        )}
+        {!loading && idea && (
+          <div className="demo-card live">
+            <span className="demo-badge">{idea.formato}</span>
+            <h4>{idea.titulo}</h4>
+            <div className="demo-hook">{idea.gancho}</div>
+            <div className="demo-cap">{idea.caption}</div>
+            <div className="demo-tags">{(idea.hashtags || []).slice(0, 4).map((t, i) => <span key={i}>{t}</span>)}</div>
+          </div>
+        )}
+        {!loading && !idea && !err && (
+          <div className="demo-card empty">
+            <span>👆</span>
+            <p>Toca un nicho para generar una idea real con IA</p>
+          </div>
+        )}
+        {err && <div className="err">{err}</div>}
+      </div>
+    </div>
+  );
+}
+
 function ConnectHub({ clients, onConnect, onSelect, onCompetitor, openLead, connectedInfo, onDismissBanner }) {
   const [comp, setComp] = useState("");
   return (
@@ -807,37 +1199,43 @@ function ConnectHub({ clients, onConnect, onSelect, onCompetitor, openLead, conn
         <div className="hero-aurora"><i className="a1" /><i className="a2" /><i className="a3" /></div>
         <div className="hero-grid">
           <div className="hero-text">
-            <h1>Conoce el verdadero <em className="grad-text">pulso</em> de cada cuenta.</h1>
-            <p>Conecta las cuentas de tus clientes una sola vez y adminístralas todas desde un panel: qué contenido funciona, cuándo publicar y qué hacer para crecer.</p>
+            <h1>Descubre en 30 segundos por qué tu Instagram <em className="grad-text">no crece</em>.</h1>
+            <p>Auditoría gratis e instantánea. Sin registrarte, sin conectar nada. Te decimos qué está frenando tu cuenta y qué cambiar esta semana.</p>
 
-            <div className="pillars">
+            <InstantAudit openLead={openLead} onConnect={onConnect} />
+
+            <div className="pillars" style={{ marginTop: 26 }}>
               <div className="pillar"><span className="pdot" style={{ background: "var(--coral)" }} /><div><b>Qué funciona</b><span>Formatos y posts que más rinden</span></div></div>
               <div className="pillar"><span className="pdot" style={{ background: "var(--violet)" }} /><div><b>Cuándo publicar</b><span>Tu día y hora pico exactos</span></div></div>
               <div className="pillar"><span className="pdot" style={{ background: "var(--teal)" }} /><div><b>Qué hacer para crecer</b><span>Estudio de mejoría accionable</span></div></div>
-            </div>
-
-            <div className="connect-cta">
-              <button className="ig-connect" onClick={onConnect}>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.3.07 1.69.07 4.9s0 3.6-.07 4.9c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.3.06-1.69.07-4.9.07s-3.6 0-4.9-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.21 8.8 2.2 12 2.2Zm0 3.2A6.6 6.6 0 1 0 18.6 12 6.6 6.6 0 0 0 12 5.4Zm0 10.9A4.3 4.3 0 1 1 16.3 12 4.3 4.3 0 0 1 12 16.3Zm6.85-11.2a1.54 1.54 0 1 0 1.55 1.54 1.54 1.54 0 0 0-1.55-1.54Z"/></svg>
-                Conectar Instagram
-              </button>
-              <div className="hint">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#6E6B78" strokeWidth="2"/><path d="M12 8v5M12 16h.01" stroke="#6E6B78" strokeWidth="2" strokeLinecap="round"/></svg>
-                <span>Tu cliente autoriza el acceso una vez con su cuenta Business o Creator. No se necesita página de Facebook.</span>
-              </div>
             </div>
           </div>
 
           <div className="hero-visual">
             <div className="glass hero-clockcard">
               <div className="cc-lab">Mejor hora para publicar</div>
-              <RadialClock />
+              <RadialClock animate />
             </div>
-            <div className="float-chip fc-1"><span className="fdot" style={{ background: "var(--teal)" }} />+86% engagement</div>
+            <div className="float-chip fc-1"><span className="fdot" style={{ background: "var(--teal)" }} /><CountUp to={86} prefix="+" suffix="% engagement" /></div>
             <div className="float-chip fc-2"><span className="fdot" style={{ background: "var(--coral)" }} />Jueves 7 PM · pico</div>
           </div>
         </div>
       </section>
+
+      <div className="section-h">Genera contenido con IA en vivo</div>
+      <LiveDemo />
+
+      <div className="section-h">Tus cuentas conectadas</div>
+      <div className="connect-cta" style={{ marginBottom: 18 }}>
+        <button className="ig-connect" onClick={onConnect}>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.3.07 1.69.07 4.9s0 3.6-.07 4.9c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.3.06-1.69.07-4.9.07s-3.6 0-4.9-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.21 8.8 2.2 12 2.2Zm0 3.2A6.6 6.6 0 1 0 18.6 12 6.6 6.6 0 0 0 12 5.4Zm0 10.9A4.3 4.3 0 1 1 16.3 12 4.3 4.3 0 0 1 12 16.3Zm6.85-11.2a1.54 1.54 0 1 0 1.55 1.54 1.54 1.54 0 0 0-1.55-1.54Z"/></svg>
+          Conectar Instagram
+        </button>
+        <div className="hint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#6E6B78" strokeWidth="2"/><path d="M12 8v5M12 16h.01" stroke="#6E6B78" strokeWidth="2" strokeLinecap="round"/></svg>
+          <span>Tu cliente autoriza el acceso una vez con su cuenta Business o Creator. No se necesita página de Facebook.</span>
+        </div>
+      </div>
 
       <div className="section-h">Tus cuentas conectadas</div>
       <div className="clients-grid">
