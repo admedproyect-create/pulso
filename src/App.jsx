@@ -350,6 +350,8 @@ const STYLE = `
 .modal-note { font-size:12.5px; color:var(--muted); background:#FAF9F6; border:1px solid var(--line); border-radius:11px; padding:12px 14px; margin-top:18px; }
 .modal-note + .send { margin-top:14px; }
 
+.foot-exit { font:inherit; font-size:12.5px; border:0; background:transparent; color:var(--muted); cursor:pointer; text-decoration:underline; padding:0; }
+.foot-exit:hover { color:var(--violet); }
 .foot { text-align:center; color:var(--muted); font-size:12.5px; padding:50px 0 36px; }
 
 /* marca en barra superior */
@@ -366,32 +368,65 @@ const STYLE = `
 .back-panel { font:inherit; font-size:13px; font-weight:600; border:0; background:transparent; color:var(--violet); cursor:pointer; padding:0; margin-top:24px; }
 .back-panel:hover { text-decoration:underline; }
 
+.empty-clients { text-align:center; background:var(--card); border:1.5px dashed var(--line); border-radius:16px; padding:34px 24px; margin-bottom:14px; }
+.empty-clients .ec-ico { width:44px; height:44px; margin:0 auto 12px; border-radius:50%; background:var(--violet-soft); color:var(--violet); font-size:22px; display:flex; align-items:center; justify-content:center; }
+.empty-clients b { font-family:'Space Grotesk'; font-weight:600; font-size:16px; }
+.empty-clients p { font-size:13.5px; color:var(--muted); margin-top:6px; }
+
 /* ===================== casos de éxito ===================== */
 .cases { display:flex; flex-direction:column; gap:16px; }
-.case { display:grid; grid-template-columns: 1.15fr .85fr; gap:0; background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden; }
+
+.cases-banner { display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; background:linear-gradient(120deg,#16161C,#241a4d 70%,#3a1f52); border-radius:18px; padding:22px 26px; }
+.cb-item { text-align:center; padding:0 18px; }
+.cb-item b { display:block; font-family:'Space Grotesk'; font-weight:700; font-size:30px; letter-spacing:-.03em; color:#fff; }
+.cb-item span { font-size:12px; color:rgba(255,255,255,.62); }
+.cb-sep { width:1px; height:34px; background:rgba(255,255,255,.16); }
+
+.case { display:grid; grid-template-columns: 1.15fr .85fr; background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden; transition:box-shadow .18s, border-color .18s; }
+.case:hover { border-color:var(--violet); box-shadow:0 16px 44px rgba(91,61,245,.13); }
 .case-body { padding:26px; }
-.case-who { display:flex; gap:13px; align-items:center; }
-.case-av { width:48px; height:48px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Space Grotesk'; font-weight:700; font-size:16px; }
-.case-who b { display:block; font-family:'Space Grotesk'; font-weight:600; font-size:16px; letter-spacing:-.01em; }
+.case-who { display:flex; gap:13px; align-items:flex-start; }
+.case-av { width:50px; height:50px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Space Grotesk'; font-weight:700; font-size:17px; }
+.case-id { min-width:0; flex:1; }
+.case-id b { display:block; font-family:'Space Grotesk'; font-weight:600; font-size:17px; letter-spacing:-.015em; }
 .case-biz { display:block; font-size:13px; color:var(--muted); }
-.case-ig { font-family:'Space Mono'; font-size:12px; color:var(--violet); text-decoration:none; }
+.case-ig { font-family:'Space Mono'; font-size:11.5px; color:var(--violet); text-decoration:none; }
 .case-ig:hover { text-decoration:underline; }
-.case-quote { font-size:16px; line-height:1.5; color:#2a2833; margin-top:18px; padding-left:14px; border-left:3px solid var(--violet); font-style:italic; }
-.case-metrics { display:flex; gap:12px; margin-top:20px; flex-wrap:wrap; }
-.case-metric { flex:1; min-width:170px; background:#FAF9F6; border:1px solid var(--line); border-radius:13px; padding:14px; }
-.cm-lab { font-size:11.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
-.cm-row { display:flex; align-items:center; gap:9px; margin-top:8px; }
-.cm-from { font-family:'Space Grotesk'; font-size:15px; color:var(--muted); text-decoration:line-through; }
-.cm-to { font-family:'Space Grotesk'; font-weight:700; font-size:22px; letter-spacing:-.02em; color:var(--ink); }
-.cm-delta { display:inline-block; margin-top:7px; font-size:11.5px; font-weight:700; color:#04695a; background:#E5F8F4; padding:3px 9px; border-radius:20px; }
-.case-proof { position:relative; background:linear-gradient(135deg,#F6F3FF,#FFF4F6); display:flex; align-items:center; justify-content:center; padding:20px; }
+.case-tags { display:flex; flex-direction:column; gap:5px; align-items:flex-end; flex-shrink:0; }
+.case-tag { font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--violet); background:var(--violet-soft); padding:4px 10px; border-radius:20px; white-space:nowrap; }
+.case-time { font-size:11px; color:var(--muted); font-family:'Space Mono'; white-space:nowrap; }
+
+.case-metrics { display:flex; gap:11px; margin-top:20px; flex-wrap:wrap; }
+.case-metric { flex:1; min-width:165px; background:#FAF9F6; border:1px solid var(--line); border-radius:14px; padding:15px; }
+.cm-lab { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+.cm-row { display:flex; align-items:baseline; gap:8px; margin-top:9px; flex-wrap:wrap; }
+.cm-from { font-family:'Space Grotesk'; font-size:14px; color:#B7B4BF; text-decoration:line-through; }
+.cm-to { font-family:'Space Grotesk'; font-weight:700; font-size:25px; letter-spacing:-.025em; color:var(--ink); }
+.cm-delta { display:inline-block; margin-top:9px; font-size:12px; font-weight:800; color:#fff; background:linear-gradient(95deg,#00B596,#00CFA8); padding:4px 11px; border-radius:20px; letter-spacing:-.01em; }
+
+.case-quote { font-size:15.5px; line-height:1.55; color:#2a2833; margin-top:20px; padding-left:15px; border-left:3px solid var(--violet); font-style:italic; }
+.case-work { margin-top:20px; background:var(--violet-soft); border-radius:12px; padding:14px 16px; }
+.case-work b { font-family:'Space Grotesk'; font-weight:600; font-size:13px; color:var(--violet); }
+.case-work p { font-size:13.5px; color:#2a2833; margin-top:5px; }
+.case-hl { display:inline-flex; align-items:center; gap:8px; margin-top:16px; background:#E5F8F4; color:#04695a; font-size:13.5px; font-weight:700; padding:9px 15px; border-radius:20px; }
+.case-hl span { color:var(--amber); font-size:15px; }
+
+.case-proof { position:relative; background:linear-gradient(135deg,#F6F3FF,#FFF4F6); display:flex; align-items:center; justify-content:center; padding:22px; }
 .case-proof.hidden { display:none; }
-.case-proof img { max-width:100%; max-height:320px; border-radius:12px; box-shadow:0 10px 30px rgba(22,22,28,.14); }
-.case-proof-lab { position:absolute; bottom:12px; font-size:11px; font-family:'Space Mono'; color:var(--muted); background:rgba(255,255,255,.9); padding:4px 10px; border-radius:20px; }
-.cases-cta { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:var(--violet-soft); border-radius:16px; padding:20px 24px; }
-.cases-cta b { font-family:'Space Grotesk'; font-weight:600; font-size:17px; }
-.cases-cta p { font-size:13.5px; color:var(--muted); margin-top:4px; }
-@media (max-width:820px){ .case { grid-template-columns:1fr; } }
+.case-proof img { max-width:100%; max-height:330px; border-radius:12px; box-shadow:0 12px 34px rgba(22,22,28,.16); }
+.case-proof-lab { position:absolute; bottom:12px; font-size:10.5px; font-family:'Space Mono'; color:var(--muted); background:rgba(255,255,255,.92); padding:4px 11px; border-radius:20px; }
+
+.cases-cta { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:var(--violet-soft); border:1.5px solid var(--violet); border-radius:16px; padding:22px 26px; }
+.cases-cta b { font-family:'Space Grotesk'; font-weight:700; font-size:18px; letter-spacing:-.01em; }
+.cases-cta p { font-size:13.5px; color:var(--muted); margin-top:5px; max-width:52ch; }
+
+@media (max-width:820px){
+  .case { grid-template-columns:1fr; }
+  .cases-banner { gap:2px; padding:18px; }
+  .cb-item { padding:8px 12px; }
+  .cb-item b { font-size:24px; }
+  .cb-sep { display:none; }
+}
 
 /* ===================== auditoría instantánea ===================== */
 @keyframes segIn { from { opacity:0; transform: scale(.86); } to { opacity:1; transform:none; } }
@@ -609,26 +644,53 @@ const PLANS = [
 // ---------- casos de éxito reales ----------
 const CASES = [
   {
+    name: "Yanka Palacios",
+    business: "Cantante",
+    tag: "Artista",
+    handle: "yankapalacioscantante",
+    initials: "YP",
+    c1: "#5B3DF5", c2: "#C13584",
+    time: "4 meses",
+    quote: "Gracias a la estrategia del grupo creativo de Pulso pude alcanzar muchos más seguidores, más visualizaciones y generar más de 7 presentaciones en el fin de semana.",
+    highlight: "+7 presentaciones en un fin de semana",
+    metrics: [
+      { label: "Seguidores", from: "1.650", to: "10.954", delta: "+564%" },
+      { label: "Visualizaciones", from: "2.340", to: "90.432", delta: "×39" },
+    ],
+    image: "/caso-yanka.jpg",
+  },
+  {
     name: "Marcela Dueñas",
     business: "Pijamas Mundo de Sueños",
+    tag: "Tienda",
     handle: "pijamas_mundo_de__suenos",
     initials: "MD",
-    c1: "#5B3DF5", c2: "#FF4D6D",
+    c1: "#FF4D6D", c2: "#FF9A6B",
+    time: "",
     quote: "Ver los números subir así me cambió la forma de trabajar mi Instagram. Ahora sé qué publicar y a qué hora, y se nota.",
+    highlight: "",
     metrics: [
       { label: "Seguidores", from: "1.730", to: "6.812", delta: "+294%" },
       { label: "Visualizaciones", from: "147", to: "47.532", delta: "×323" },
     ],
-    // Sube tus capturas a la carpeta "public" del repo con este nombre para que aparezcan:
     image: "/caso-marcela.jpg",
   },
-];
-
-// ---------- connected clients (demo) ----------
-const DEMO_CLIENTS = [
-  { id: "c1", handle: "cafe.aurora", name: "Café Aurora", initials: "CA", c1: "#5B3DF5", c2: "#FF4D6D", followers: "24.8k", niche: "Gastronomía" },
-  { id: "c2", handle: "studiofit.co", name: "Studio Fit", initials: "SF", c1: "#00B596", c2: "#5BE0C4", followers: "11.2k", niche: "Fitness" },
-  { id: "c3", handle: "moda.lena", name: "Moda Lena", initials: "ML", c1: "#FFB02E", c2: "#FF9A6B", followers: "48.1k", niche: "Moda" },
+  {
+    name: "Juan Ramírez",
+    business: "Psicólogo",
+    tag: "Profesional",
+    handle: "juanramirezps",
+    initials: "JR",
+    c1: "#00B596", c2: "#5BE0C4",
+    time: "",
+    work: "Solo organizamos su perfil y usó las ideas de contenido que genera Pulso. Con eso multiplicó su alcance por 367 y llegó a muchos más pacientes.",
+    highlight: "Más consultas agendadas",
+    metrics: [
+      { label: "Seguidores", from: "1.950", to: "2.855", delta: "+46%" },
+      { label: "Visualizaciones", from: "56", to: "20.540", delta: "×367" },
+    ],
+    image: "/caso-juan.jpg",
+  },
 ];
 
 // Mapea una fila del backend (/api/clients) al formato visual de las tarjetas.
@@ -799,9 +861,13 @@ function CopyButton({ text, label = "Copiar", okLabel = "¡Copiado!" }) {
 export default function Pulso() {
   const [view, setView] = useState("connect");
 
-  // multi-cliente: cuentas conectadas por la agencia + cuenta activa
-  const [clients, setClients] = useState(DEMO_CLIENTS);
-  const [activeClient, setActiveClient] = useState(DEMO_CLIENTS[0]);
+  // Panel privado: solo visible para ti. Se abre con ?panel en la dirección
+  // (ej. pulso-x2ws.vercel.app/?panel) y queda recordado en el navegador.
+  const [isOwner, setIsOwner] = useState(false);
+
+  // multi-cliente: cuentas conectadas + cuenta activa (vacío hasta que el backend responda)
+  const [clients, setClients] = useState([]);
+  const [activeClient, setActiveClient] = useState(null);
   const [mode, setMode] = useState("owner"); // "owner" (conectada) | "competitor" (datos públicos)
   const [connectOpen, setConnectOpen] = useState(false);
   const simCount = React.useRef(0);
@@ -819,10 +885,20 @@ export default function Pulso() {
   // Banner tras volver del login de Instagram (?connected=ok&user=...)
   const [connectedInfo, setConnectedInfo] = useState(null);
 
-  // Al cargar: intenta traer las cuentas reales del backend. Si no hay backend
-  // (p. ej. en la vista previa), se queda con las cuentas demo.
+  // Al cargar: detecta si eres tú (panel privado) y trae las cuentas reales.
   useEffect(() => {
     let alive = true;
+    const params = new URLSearchParams(window.location.search);
+
+    // Panel privado: se abre con ?panel y queda recordado en este navegador.
+    let owner = false;
+    try {
+      if (params.has("panel")) { localStorage.setItem("pulso_owner", "1"); owner = true; }
+      else if (localStorage.getItem("pulso_owner") === "1") owner = true;
+      if (params.has("salir")) { localStorage.removeItem("pulso_owner"); owner = false; }
+    } catch (_) { owner = params.has("panel"); }
+    setIsOwner(owner);
+
     fetch("/api/clients")
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
@@ -832,13 +908,14 @@ export default function Pulso() {
         setActiveClient(mapped[0]);
         analyzeAccount(mapped[0]); // deduce el nicho de la cuenta real
       })
-      .catch(() => { /* sin backend: se usan los datos demo */ });
+      .catch(() => { /* sin backend: la lista queda vacía */ });
 
     // ¿Volvemos de autorizar en Instagram?
-    const params = new URLSearchParams(window.location.search);
     const connected = params.get("connected");
     if (connected === "ok") {
       setConnectedInfo({ ok: true, user: params.get("user") });
+      setIsOwner(true);
+      try { localStorage.setItem("pulso_owner", "1"); } catch (_) {}
       setView("panel");
       window.history.replaceState({}, "", window.location.pathname);
     } else if (connected === "error" || connected === "cancel") {
@@ -952,22 +1029,27 @@ export default function Pulso() {
               <div className="brand-tag">Inteligencia de contenido</div>
             </div>
           </div>
-          <nav className="nav">
-            <button className={view === "connect" ? "on" : ""} onClick={() => setView("connect")}>Inicio</button>
-            <button className={view === "panel" || view === "dashboard" ? "on" : ""} onClick={() => setView("panel")}>Análisis</button>
-            <button className={view === "generator" ? "on" : ""} onClick={() => setView("generator")}>Ideas</button>
-            <button className={view === "calendar" ? "on" : ""} onClick={() => setView("calendar")}>Calendario</button>
-          </nav>
+          {isOwner && (
+            <nav className="nav">
+              <button className={view === "connect" ? "on" : ""} onClick={() => setView("connect")}>Inicio</button>
+              <button className={view === "panel" || view === "dashboard" ? "on" : ""} onClick={() => setView("panel")}>Análisis</button>
+              <button className={view === "generator" ? "on" : ""} onClick={() => setView("generator")}>Ideas</button>
+              <button className={view === "calendar" ? "on" : ""} onClick={() => setView("calendar")}>Calendario</button>
+            </nav>
+          )}
           <button className="top-cta" onClick={() => openLead("Auditoría gratis")}>Auditoría gratis</button>
         </header>
 
         {view === "connect" && <ConnectHub onConnect={() => setConnectOpen(true)} openLead={openLead} />}
-        {view === "panel" && <AgencyPanel clients={clients} onConnect={() => setConnectOpen(true)} onSelect={selectClient} onCompetitor={analyzeCompetitor} connectedInfo={connectedInfo} onDismissBanner={() => setConnectedInfo(null)} />}
-        {view === "dashboard" && <Dashboard client={activeClient} mode={mode} goGen={() => setView("generator")} goCal={() => setView("calendar")} openLead={openLead} goConnect={() => setView("panel")} goPanel={() => setView("panel")} />}
-        {view === "generator" && <Generator scheduleIdea={scheduleIdea} goCal={() => setView("calendar")} openLead={openLead} accountProfile={accountProfile} analyzing={analyzing} activeClient={activeClient} mode={mode} />}
-        {view === "calendar" && <Calendar events={events} addEvent={addEvent} removeEvent={removeEvent} fillOptimal={fillOptimal} clearAll={clearAll} onEdit={setEditing} openLead={openLead} user={activeClient?.handle} />}
+        {view === "panel" && isOwner && <AgencyPanel clients={clients} onConnect={() => setConnectOpen(true)} onSelect={selectClient} onCompetitor={analyzeCompetitor} connectedInfo={connectedInfo} onDismissBanner={() => setConnectedInfo(null)} />}
+        {view === "dashboard" && isOwner && <Dashboard client={activeClient} mode={mode} goGen={() => setView("generator")} goCal={() => setView("calendar")} openLead={openLead} goConnect={() => setView("panel")} goPanel={() => setView("panel")} />}
+        {view === "generator" && isOwner && <Generator scheduleIdea={scheduleIdea} goCal={() => setView("calendar")} openLead={openLead} accountProfile={accountProfile} analyzing={analyzing} activeClient={activeClient} mode={mode} />}
+        {view === "calendar" && isOwner && <Calendar events={events} addEvent={addEvent} removeEvent={removeEvent} fillOptimal={fillOptimal} clearAll={clearAll} onEdit={setEditing} openLead={openLead} user={activeClient?.handle} />}
 
-        <div className="foot">Pulso · prototipo de demostración · Las métricas mostradas son datos de ejemplo</div>
+        <div className="foot">
+          <b>{BRAND.name}</b> · {BRAND.tagline}
+          {isOwner && <> · <button className="foot-exit" onClick={() => { try { localStorage.removeItem("pulso_owner"); } catch (_) {} setIsOwner(false); setView("connect"); }}>salir del panel</button></>}
+        </div>
       </div>
 
       {connectOpen && <ConnectModal onClose={() => setConnectOpen(false)} onSimulate={simulateConnect} />}
@@ -1247,19 +1329,29 @@ function SuccessCases({ openLead }) {
   const [imgOk, setImgOk] = useState({});
   return (
     <div className="cases">
+      <div className="cases-banner">
+        <div className="cb-item"><b><CountUp to={3} /></b><span>cuentas transformadas</span></div>
+        <div className="cb-sep" />
+        <div className="cb-item"><b>+<CountUp to={15} />k</b><span>seguidores generados</span></div>
+        <div className="cb-sep" />
+        <div className="cb-item"><b><CountUp to={158} />k</b><span>visualizaciones alcanzadas</span></div>
+      </div>
+
       {CASES.map((c, i) => (
         <div className="case" key={i}>
           <div className="case-body">
             <div className="case-who">
               <div className="case-av" style={{ background: `linear-gradient(135deg, ${c.c1}, ${c.c2})` }}>{c.initials}</div>
-              <div>
+              <div className="case-id">
                 <b>{c.name}</b>
                 <span className="case-biz">{c.business}</span>
                 <a className="case-ig" href={`https://instagram.com/${c.handle}`} target="_blank" rel="noopener noreferrer">@{c.handle} ↗</a>
               </div>
+              <div className="case-tags">
+                <span className="case-tag">{c.tag}</span>
+                {c.time && <span className="case-time">{c.time}</span>}
+              </div>
             </div>
-
-            <blockquote className="case-quote">{c.quote}</blockquote>
 
             <div className="case-metrics">
               {c.metrics.map((m, j) => (
@@ -1267,18 +1359,22 @@ function SuccessCases({ openLead }) {
                   <div className="cm-lab">{m.label}</div>
                   <div className="cm-row">
                     <span className="cm-from">{m.from}</span>
-                    <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M1 5h13M10 1l4 4-4 4" stroke="#6E6B78" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><path d="M1 5h14M11 1l4 4-4 4" stroke="#C9C4D6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     <span className="cm-to">{m.to}</span>
                   </div>
                   <span className="cm-delta">{m.delta}</span>
                 </div>
               ))}
             </div>
+
+            {c.quote && <blockquote className="case-quote">{c.quote}</blockquote>}
+            {c.work && <div className="case-work"><b>Qué trabajamos</b><p>{c.work}</p></div>}
+            {c.highlight && <div className="case-hl"><span>★</span>{c.highlight}</div>}
           </div>
 
           {c.image && (
             <div className={`case-proof ${imgOk[i] === false ? "hidden" : ""}`}>
-              <img src={c.image} alt={`Métricas reales de ${c.business}`} onError={() => setImgOk((p) => ({ ...p, [i]: false }))} />
+              <img src={c.image} alt={`Métricas reales de ${c.name}`} onError={() => setImgOk((p) => ({ ...p, [i]: false }))} />
               <span className="case-proof-lab">Métricas reales de Instagram</span>
             </div>
           )}
@@ -1287,8 +1383,8 @@ function SuccessCases({ openLead }) {
 
       <div className="cases-cta">
         <div>
-          <b>¿Quieres resultados así en tu cuenta?</b>
-          <p>Empieza con una auditoría gratis y te digo qué está frenando tu Instagram.</p>
+          <b>Tres cuentas distintas. El mismo método.</b>
+          <p>Una tienda, una artista y un profesional. Empieza con tu auditoría gratis y descubre qué le falta a la tuya.</p>
         </div>
         <button className="gen-btn" onClick={() => openLead("Mentoría Pulso")}>Quiero mis resultados</button>
       </div>
@@ -1326,6 +1422,14 @@ function AgencyPanel({ clients, onConnect, onSelect, onCompetitor, connectedInfo
       </div>
 
       <div className="section-h">Tus cuentas conectadas</div>
+      {clients.length === 0 && (
+        <div className="empty-clients">
+          <div className="ec-ico">＋</div>
+          <b>Aún no hay cuentas conectadas</b>
+          <p>Conecta el Instagram de tu primer cliente para ver sus métricas y generar su contenido.</p>
+        </div>
+      )}
+
       <div className="clients-grid">
         {clients.map((cl) => (
           <button className="client-card" key={cl.id} onClick={() => onSelect(cl)}>
@@ -1425,8 +1529,8 @@ function ConnectHub({ onConnect, openLead }) {
 
       <section className="ctaband">
         <div>
-          <h2>Tu Instagram puede crecer <em>como el de Marcela</em>.</h2>
-          <p>Empieza con la auditoría gratis. Si te sirve lo que ves, hablamos de la mentoría.</p>
+          <h2>Deja de publicar <em>a ciegas</em>.</h2>
+          <p>Descubre qué está frenando tu cuenta y qué publicar cada semana. El primer paso es gratis.</p>
         </div>
         <button className="big" onClick={() => openLead("Auditoría gratis")}>Agendar mi auditoría gratis</button>
       </section>
