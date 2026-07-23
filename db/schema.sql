@@ -47,3 +47,20 @@ ALTER TABLE scheduled_posts ADD COLUMN IF NOT EXISTS published_at TIMESTAMPTZ;
 
 CREATE INDEX IF NOT EXISTS idx_clients_agency ON clients(agency_id);
 CREATE INDEX IF NOT EXISTS idx_posts_client ON scheduled_posts(client_id);
+
+-- Nicho detectado automáticamente para cada cuenta conectada (Etapa 3):
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS niche TEXT;
+
+-- Leads capturados al descargar el plan de 8 días (imán de contactos):
+CREATE TABLE IF NOT EXISTS leads (
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  nombre     TEXT,
+  email      TEXT NOT NULL,
+  ig_handle  TEXT,
+  nicho      TEXT,
+  puntaje    INTEGER,
+  origen     TEXT DEFAULT 'plan-8-dias',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_leads_email ON leads(email);
+CREATE INDEX IF NOT EXISTS idx_leads_fecha ON leads(created_at DESC);

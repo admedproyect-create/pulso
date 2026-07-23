@@ -373,6 +373,35 @@ const STYLE = `
 .empty-clients b { font-family:'Space Grotesk'; font-weight:600; font-size:16px; }
 .empty-clients p { font-size:13.5px; color:var(--muted); margin-top:6px; }
 
+/* ===================== plan de 8 días (imán) ===================== */
+.plan8 { margin-top:24px; background:linear-gradient(135deg,#F6F3FF,#FFF6F0); border:1.5px solid var(--violet); border-radius:18px; padding:22px; }
+.plan8-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+.plan8-lab { display:inline-block; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:var(--coral); padding:4px 10px; border-radius:20px; margin-bottom:8px; }
+.plan8-head b { display:block; font-family:'Space Grotesk'; font-weight:700; font-size:19px; letter-spacing:-.015em; }
+.plan8-head p { font-size:13.5px; color:var(--muted); margin-top:5px; max-width:56ch; }
+.plan8-dl { font:inherit; font-weight:700; font-size:14px; cursor:pointer; border:0; background:var(--violet); color:#fff; border-radius:11px; padding:12px 18px; white-space:nowrap; box-shadow:0 8px 22px rgba(91,61,245,.3); }
+.plan8-dl:hover { background:#4b30d8; }
+.plan8-loading { display:flex; align-items:center; gap:11px; padding:22px 2px; font-size:14px; font-weight:500; color:var(--violet); }
+.plan8-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(215px,1fr)); gap:11px; margin-top:18px; position:relative; }
+.plan8-grid.fade { max-height:430px; overflow:hidden; -webkit-mask-image:linear-gradient(#000 62%,transparent); mask-image:linear-gradient(#000 62%,transparent); }
+.p8-day { background:#fff; border:1px solid var(--line); border-radius:13px; padding:14px; }
+.p8-top { display:flex; align-items:center; gap:7px; }
+.p8-num { width:21px; height:21px; border-radius:6px; background:var(--ink); color:#fff; font-family:'Space Grotesk'; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.p8-fmt { font-size:8.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#fff; padding:2px 7px; border-radius:4px; }
+.p8-hora { font-family:'Space Mono'; font-size:10.5px; color:var(--muted); margin-left:auto; }
+.p8-day b { display:block; font-family:'Space Grotesk'; font-weight:600; font-size:14px; letter-spacing:-.01em; margin-top:10px; }
+.p8-hook { font-size:12.5px; font-weight:500; color:var(--violet); margin-top:7px; font-style:italic; }
+.p8-day p { font-size:12px; color:var(--muted); margin-top:6px; }
+.plan8-gate { text-align:center; background:#fff; border:1.5px dashed var(--violet); border-radius:15px; padding:22px; margin-top:16px; }
+.plan8-gate b { font-family:'Space Grotesk'; font-weight:700; font-size:17px; }
+.plan8-gate > p { font-size:13.5px; color:var(--muted); margin:6px auto 15px; max-width:48ch; }
+.gate-form b { display:block; }
+.gate-form > p { font-size:13.5px; color:var(--muted); margin:6px auto 14px; max-width:44ch; }
+.gate-row { display:flex; gap:9px; flex-wrap:wrap; max-width:460px; margin:0 auto 12px; }
+.gate-row input { flex:1; min-width:170px; font:inherit; font-size:15px; padding:13px 14px; border:1.5px solid var(--line); border-radius:11px; outline:0; }
+.gate-row input:focus { border-color:var(--violet); }
+.gate-note { display:block; font-size:11.5px; color:var(--muted); margin-top:11px; }
+
 /* ===================== muestra del calendario ===================== */
 .show-box { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:24px; }
 .show-head { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:20px; }
@@ -1107,6 +1136,15 @@ function InstantAudit({ openLead, onConnect }) {
   const [msg, setMsg] = useState(0);
   const resultRef = React.useRef(null);
 
+  // Plan de 8 días (imán de leads)
+  const [plan, setPlan] = useState(null);
+  const [planLoading, setPlanLoading] = useState(false);
+  const [gate, setGate] = useState(false);       // muestra el formulario de correo
+  const [unlocked, setUnlocked] = useState(false);
+  const [leadName, setLeadName] = useState("");
+  const [leadMail, setLeadMail] = useState("");
+  const [sending, setSending] = useState(false);
+
   useEffect(() => {
     if (step !== "loading") return;
     const t = setInterval(() => setMsg((m) => (m + 1) % AUD_LOADING.length), 1800);
@@ -1130,13 +1168,140 @@ function InstantAudit({ openLead, onConnect }) {
       if (!r.ok) throw new Error("fallo");
       const d = await r.json();
       setRes(d); setStep("result");
+      cargarPlan(d);
     } catch (_) {
       setErr("No pudimos completar la auditoría. Inténtalo de nuevo en un momento.");
       setStep("q");
     }
   }
 
-  function reset() { setStep("form"); setRes(null); setHandle(""); setNicho(""); setFreq(""); setFmt(""); }
+  async function cargarPlan(diag) {
+    setPlanLoading(true);
+    try {
+      const r = await fetch("/api/plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          handle: handle.replace(/^@/, ""), nicho, frecuencia: freq, formato: fmt,
+          objetivo: "crecer", diagnostico: diag?.diagnostico || "",
+        }),
+      });
+      if (r.ok) setPlan(await r.json());
+    } catch (_) { /* sin plan: la auditoría igual se muestra */ }
+    finally { setPlanLoading(false); }
+  }
+
+  async function desbloquear() {
+    if (!leadMail.includes("@")) return;
+    setSending(true);
+    try {
+      await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: leadName, email: leadMail, handle: handle.replace(/^@/, ""),
+          nicho, puntaje: res?.puntaje, origen: "plan-8-dias",
+        }),
+      });
+    } catch (_) { /* no bloqueamos la descarga si falla el guardado */ }
+    setUnlocked(true); setGate(false); setSending(false);
+    descargarPlanPDF();
+  }
+
+
+  // Descarga el plan de 8 días como PDF con la marca Pulso
+  async function descargarPlanPDF() {
+    if (!plan) return;
+    let mod;
+    try { mod = await import("jspdf"); } catch (_) { return; }
+    const { jsPDF } = mod;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const W = doc.internal.pageSize.getWidth();
+    const H = doc.internal.pageSize.getHeight();
+    const M = 42;
+    const rgb = (h) => { const n = parseInt(h.replace("#",""),16); return [(n>>16)&255,(n>>8)&255,n&255]; };
+    const fill = (h) => doc.setFillColor(...rgb(h));
+    const ink = (h) => doc.setTextColor(...rgb(h));
+    const draw = (h) => doc.setDrawColor(...rgb(h));
+    const C = { ink:"#16161C", muted:"#6E6B78", line:"#E8E5DE", violet:"#5B3DF5", soft:"#EFEBFF", paper:"#FAF9F6" };
+    const fecha = new Date().toLocaleDateString("es-CO", { day:"2-digit", month:"long", year:"numeric" });
+
+    function header() {
+      fill(C.violet); doc.roundedRect(M, 36, 24, 24, 7, 7, "F");
+      doc.setFillColor(255,255,255); doc.circle(M+12, 48, 4.4, "F");
+      ink(C.ink); doc.setFont("helvetica","bold"); doc.setFontSize(16);
+      doc.text(BRAND.name, M+32, 49);
+      ink(C.muted); doc.setFont("helvetica","normal"); doc.setFontSize(7.5);
+      doc.text(BRAND.tagline, M+32, 58);
+      ink(C.muted); doc.setFontSize(9);
+      doc.text("Plan de contenido · 8 días", W-M, 49, { align:"right" });
+      draw(C.line); doc.setLineWidth(1); doc.line(M, 74, W-M, 74);
+    }
+    function footer(page, pages) {
+      const y = H - 58;
+      draw(C.line); doc.setLineWidth(1); doc.line(M, y, W-M, y);
+      fill(C.violet); doc.roundedRect(M, y+10, 13, 13, 4, 4, "F");
+      doc.setFillColor(255,255,255); doc.circle(M+6.5, y+16.5, 2.4, "F");
+      ink(C.ink); doc.setFont("helvetica","bold"); doc.setFontSize(9);
+      doc.text(`${BRAND.name} · ${BRAND.tagline}`, M+20, y+20);
+      ink(C.muted); doc.setFont("helvetica","normal"); doc.setFontSize(7.5);
+      const contacto = [BRAND.site, BRAND.email, BRAND.phone].filter(Boolean).join("   ·   ");
+      if (contacto) doc.text(contacto, M+20, y+31);
+      doc.text(`Generado el ${fecha}`, W-M, y+20, { align:"right" });
+      doc.text(`Página ${page} de ${pages}`, W-M, y+31, { align:"right" });
+    }
+
+    header();
+    let y = 100;
+    ink(C.ink); doc.setFont("helvetica","bold"); doc.setFontSize(21);
+    doc.text("Tu plan de 8 días", M, y); y += 17;
+    ink(C.muted); doc.setFont("helvetica","normal"); doc.setFontSize(10);
+    doc.text(`@${handle.replace(/^@/,"")}   ·   ${nicho}`, M, y); y += 20;
+
+    if (plan.resumen) {
+      fill(C.soft); const lr = doc.splitTextToSize(plan.resumen, W-M*2-28);
+      const hh = 20 + lr.length*12;
+      doc.roundedRect(M, y, W-M*2, hh, 8, 8, "F");
+      ink(C.violet); doc.setFontSize(9.5); doc.text(lr, M+14, y+16);
+      y += hh + 18;
+    }
+
+    (plan.dias || []).forEach((d) => {
+      const ideaLines = doc.splitTextToSize(String(d.idea||""), W-M*2-28);
+      const hookLines = doc.splitTextToSize(`Gancho: ${d.gancho||""}`, W-M*2-28);
+      const need = 54 + ideaLines.length*12 + hookLines.length*11;
+      if (y + need > H - 80) { doc.addPage(); header(); y = 100; }
+
+      fill(C.paper); draw(C.line); doc.setLineWidth(1);
+      doc.roundedRect(M, y, W-M*2, need-8, 10, 10, "FD");
+
+      fill(C.violet); doc.circle(M+22, y+22, 12, "F");
+      doc.setTextColor(255,255,255); doc.setFont("helvetica","bold"); doc.setFontSize(11);
+      doc.text(String(d.dia), M+22, y+26, { align:"center" });
+
+      ink(C.ink); doc.setFont("helvetica","bold"); doc.setFontSize(12);
+      doc.text(String(d.titulo||""), M+44, y+20);
+      ink(C.muted); doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
+      doc.text(`${d.nombre||""}  ·  ${d.formato||""}  ·  ${d.hora||""}`, M+44, y+33);
+
+      ink(C.violet); doc.setFont("helvetica","bold"); doc.setFontSize(9);
+      doc.text(hookLines, M+14, y+50);
+      ink("#3a3845"); doc.setFont("helvetica","normal"); doc.setFontSize(9.5);
+      doc.text(ideaLines, M+14, y+50 + hookLines.length*11 + 6);
+
+      if (Array.isArray(d.hashtags) && d.hashtags.length) {
+        ink(C.muted); doc.setFontSize(8);
+        doc.text(d.hashtags.join("  "), M+14, y+need-18);
+      }
+      y += need + 8;
+    });
+
+    const pages = doc.getNumberOfPages();
+    for (let i=1;i<=pages;i++){ doc.setPage(i); footer(i, pages); }
+    doc.save(`plan-8-dias-${handle.replace(/^@/,"") || "pulso"}.pdf`);
+  }
+
+  function reset() { setStep("form"); setRes(null); setHandle(""); setNicho(""); setFreq(""); setFmt(""); setPlan(null); setUnlocked(false); setGate(false); }
 
   // --- paso 1: usuario ---
   if (step === "form") {
@@ -1261,6 +1426,72 @@ function InstantAudit({ openLead, onConnect }) {
           <span>Tu mejor momento estimado</span>
           <b>{res.mejor_momento.dia} · {res.mejor_momento.franja}</b>
           <p>{res.mejor_momento.razon}</p>
+        </div>
+      )}
+
+      {(planLoading || plan) && (
+        <div className="plan8">
+          <div className="plan8-head">
+            <div>
+              <span className="plan8-lab">Regalo para ti</span>
+              <b>Tu plan de contenido para los próximos 8 días</b>
+              <p>{plan?.resumen || "Preparando tu plan personalizado…"}</p>
+            </div>
+            {plan && (
+              <button className="plan8-dl" onClick={() => (unlocked ? descargarPlanPDF() : setGate(true))}>
+                {unlocked ? "↓ Descargar de nuevo" : "↓ Descargar en PDF"}
+              </button>
+            )}
+          </div>
+
+          {planLoading && (
+            <div className="plan8-loading"><span className="spin" /> Diseñando tus 8 días de contenido…</div>
+          )}
+
+          {plan && (
+            <div className={`plan8-grid ${unlocked ? "" : "fade"}`}>
+              {(plan.dias || []).map((d, i) => {
+                const c = FMT_COLORS[d.formato] || FMT_COLORS.Post;
+                return (
+                  <div className="p8-day" key={i}>
+                    <div className="p8-top">
+                      <span className="p8-num">{d.dia}</span>
+                      <span className="p8-fmt" style={{ background: c.bg }}>{d.formato}</span>
+                      <span className="p8-hora">{d.hora}</span>
+                    </div>
+                    <b>{d.titulo}</b>
+                    <div className="p8-hook">{d.gancho}</div>
+                    <p>{d.idea}</p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {plan && !unlocked && (
+            <div className="plan8-gate">
+              {!gate ? (
+                <>
+                  <b>Llévate el plan completo</b>
+                  <p>Descárgalo en PDF con los 8 días, los ganchos y los hashtags listos para copiar.</p>
+                  <button className="gen-btn" onClick={() => setGate(true)}>↓ Descargar mi plan gratis</button>
+                </>
+              ) : (
+                <div className="gate-form">
+                  <b>¿A dónde te lo enviamos?</b>
+                  <p>Déjame tus datos y descarga el PDF al instante.</p>
+                  <div className="gate-row">
+                    <input value={leadName} onChange={(e) => setLeadName(e.target.value)} placeholder="Tu nombre" />
+                    <input value={leadMail} onChange={(e) => setLeadMail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && desbloquear()} placeholder="tu@correo.com" type="email" />
+                  </div>
+                  <button className="gen-btn" disabled={!leadMail.includes("@") || sending} onClick={desbloquear}>
+                    {sending ? "Preparando…" : "Descargar mi plan"}
+                  </button>
+                  <span className="gate-note">Sin spam. Solo para enviarte tu plan y consejos de contenido.</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
