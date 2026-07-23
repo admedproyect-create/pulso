@@ -373,6 +373,28 @@ const STYLE = `
 .empty-clients b { font-family:'Space Grotesk'; font-weight:600; font-size:16px; }
 .empty-clients p { font-size:13.5px; color:var(--muted); margin-top:6px; }
 
+/* ===================== muestra del calendario ===================== */
+.show-box { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:24px; }
+.show-head { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:20px; }
+.show-head b { font-family:'Space Grotesk'; font-weight:700; font-size:19px; letter-spacing:-.015em; }
+.show-head p { font-size:13.5px; color:var(--muted); margin-top:6px; max-width:58ch; }
+.show-week { display:grid; grid-template-columns:repeat(7,minmax(128px,1fr)); gap:9px; overflow-x:auto; padding-bottom:6px; }
+.show-day { background:#FAF9F6; border:1px solid var(--line); border-radius:13px; padding:11px 10px; min-height:132px; }
+.show-day.top { border-color:var(--violet); background:var(--violet-soft); }
+.sd-head { display:flex; align-items:center; justify-content:space-between; font-family:'Space Grotesk'; font-weight:600; font-size:13px; margin-bottom:9px; }
+.sd-head i { font-style:normal; font-size:11px; }
+.sd-item { border-radius:10px; padding:9px; border:1px solid transparent; }
+.sd-item.peak { box-shadow:0 0 0 2px var(--violet); }
+.sd-fmt { font-size:8.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#fff; padding:2px 6px; border-radius:4px; display:inline-block; }
+.sd-time { font-family:'Space Mono'; font-weight:700; font-size:11.5px; margin-top:6px; }
+.sd-name { font-size:11px; color:var(--ink); margin-top:3px; line-height:1.3; }
+.sd-viral { font-size:8.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--violet); margin-top:5px; }
+.show-legend { display:flex; gap:15px; flex-wrap:wrap; align-items:center; margin-top:18px; font-size:12.5px; color:var(--muted); }
+.show-legend span { display:flex; align-items:center; gap:6px; }
+.show-legend i { width:10px; height:10px; border-radius:3px; display:inline-block; }
+.show-pdf { margin-left:auto; font-weight:600; color:var(--violet); }
+@media (max-width:820px){ .show-pdf { margin-left:0; } }
+
 /* ===================== casos de éxito ===================== */
 .cases { display:flex; flex-direction:column; gap:16px; }
 
@@ -1324,6 +1346,61 @@ function LiveDemo() {
   );
 }
 
+// ---------- muestra del calendario (portada) ----------
+const SHOW_WEEK = [
+  { d: "Lun", items: [{ t: "7:00 PM", f: "Carrusel", n: "5 errores que frenan tu progreso", peak: true }] },
+  { d: "Mar", items: [{ t: "8:00 AM", f: "Historia", n: "Detrás de cámaras" }] },
+  { d: "Mié", items: [{ t: "12:30 PM", f: "Carrusel", n: "Guía para principiantes" }] },
+  { d: "Jue", items: [{ t: "7:30 PM", f: "Reel", n: "Antes y después real", peak: true }], top: true },
+  { d: "Vie", items: [{ t: "6:00 PM", f: "Reel", n: "3 tips en 15 segundos" }] },
+  { d: "Sáb", items: [{ t: "11:00 AM", f: "Post", n: "Recomendación del día" }] },
+  { d: "Dom", items: [{ t: "7:00 PM", f: "Reel", n: "Rutina paso a paso", peak: true }] },
+];
+
+function CalendarShowcase({ openLead }) {
+  return (
+    <div className="show-box">
+      <div className="show-head">
+        <div>
+          <b>Tu mes entero, organizado hora por hora</b>
+          <p>Cada publicación cae en el día y la hora en que tu audiencia está más activa. Y te lo llevas en PDF para tenerlo siempre a mano.</p>
+        </div>
+        <button className="gen-btn" onClick={() => openLead("Mentoría Pulso")}>Quiero mi calendario</button>
+      </div>
+
+      <div className="show-week">
+        {SHOW_WEEK.map((day, i) => (
+          <div className={`show-day ${day.top ? "top" : ""}`} key={i}>
+            <div className="sd-head">
+              <span>{day.d}</span>
+              {day.top && <i title="Tu mejor día">🔥</i>}
+            </div>
+            {day.items.map((it, j) => {
+              const c = FMT_COLORS[it.f] || FMT_COLORS.Post;
+              return (
+                <div className={`sd-item ${it.peak ? "peak" : ""}`} key={j} style={{ background: c.soft }}>
+                  <span className="sd-fmt" style={{ background: c.bg }}>{it.f}</span>
+                  <div className="sd-time">{it.t}</div>
+                  <div className="sd-name">{it.n}</div>
+                  {it.peak && <div className="sd-viral">⚡ Hora pico</div>}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      <div className="show-legend">
+        <span><i style={{ background: "#5B3DF5" }} />Reel</span>
+        <span><i style={{ background: "#FF4D6D" }} />Carrusel</span>
+        <span><i style={{ background: "#00B596" }} />Historia</span>
+        <span><i style={{ background: "#FFB02E" }} />Post</span>
+        <span className="show-pdf">📄 Descargable en PDF con tu marca</span>
+      </div>
+    </div>
+  );
+}
+
 // ---------- casos de éxito ----------
 function SuccessCases({ openLead }) {
   const [imgOk, setImgOk] = useState({});
@@ -1498,6 +1575,9 @@ function ConnectHub({ onConnect, openLead }) {
 
       <div className="section-h">Genera contenido con IA en vivo</div>
       <LiveDemo />
+
+      <div className="section-h">Y lo organizamos en tu calendario</div>
+      <CalendarShowcase openLead={openLead} />
 
       <div className="section-h">Cómo funciona</div>
       <div className="steps">
