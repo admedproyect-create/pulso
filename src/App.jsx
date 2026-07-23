@@ -360,6 +360,39 @@ const STYLE = `
 .brand-tag { font-family:'Space Mono'; font-size:10.5px; letter-spacing:.02em; color:var(--muted); margin-top:1px; }
 @media (max-width:560px){ .brand-tag { display:none; } }
 
+.panel-head { padding: 34px 0 6px; }
+.panel-head h1 { font-family:'Space Grotesk'; font-weight:700; font-size:32px; letter-spacing:-.03em; }
+.panel-head p { color:var(--muted); font-size:15px; margin-top:8px; }
+.back-panel { font:inherit; font-size:13px; font-weight:600; border:0; background:transparent; color:var(--violet); cursor:pointer; padding:0; margin-top:24px; }
+.back-panel:hover { text-decoration:underline; }
+
+/* ===================== casos de éxito ===================== */
+.cases { display:flex; flex-direction:column; gap:16px; }
+.case { display:grid; grid-template-columns: 1.15fr .85fr; gap:0; background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden; }
+.case-body { padding:26px; }
+.case-who { display:flex; gap:13px; align-items:center; }
+.case-av { width:48px; height:48px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Space Grotesk'; font-weight:700; font-size:16px; }
+.case-who b { display:block; font-family:'Space Grotesk'; font-weight:600; font-size:16px; letter-spacing:-.01em; }
+.case-biz { display:block; font-size:13px; color:var(--muted); }
+.case-ig { font-family:'Space Mono'; font-size:12px; color:var(--violet); text-decoration:none; }
+.case-ig:hover { text-decoration:underline; }
+.case-quote { font-size:16px; line-height:1.5; color:#2a2833; margin-top:18px; padding-left:14px; border-left:3px solid var(--violet); font-style:italic; }
+.case-metrics { display:flex; gap:12px; margin-top:20px; flex-wrap:wrap; }
+.case-metric { flex:1; min-width:170px; background:#FAF9F6; border:1px solid var(--line); border-radius:13px; padding:14px; }
+.cm-lab { font-size:11.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+.cm-row { display:flex; align-items:center; gap:9px; margin-top:8px; }
+.cm-from { font-family:'Space Grotesk'; font-size:15px; color:var(--muted); text-decoration:line-through; }
+.cm-to { font-family:'Space Grotesk'; font-weight:700; font-size:22px; letter-spacing:-.02em; color:var(--ink); }
+.cm-delta { display:inline-block; margin-top:7px; font-size:11.5px; font-weight:700; color:#04695a; background:#E5F8F4; padding:3px 9px; border-radius:20px; }
+.case-proof { position:relative; background:linear-gradient(135deg,#F6F3FF,#FFF4F6); display:flex; align-items:center; justify-content:center; padding:20px; }
+.case-proof.hidden { display:none; }
+.case-proof img { max-width:100%; max-height:320px; border-radius:12px; box-shadow:0 10px 30px rgba(22,22,28,.14); }
+.case-proof-lab { position:absolute; bottom:12px; font-size:11px; font-family:'Space Mono'; color:var(--muted); background:rgba(255,255,255,.9); padding:4px 10px; border-radius:20px; }
+.cases-cta { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:var(--violet-soft); border-radius:16px; padding:20px 24px; }
+.cases-cta b { font-family:'Space Grotesk'; font-weight:600; font-size:17px; }
+.cases-cta p { font-size:13.5px; color:var(--muted); margin-top:4px; }
+@media (max-width:820px){ .case { grid-template-columns:1fr; } }
+
 /* ===================== auditoría instantánea ===================== */
 @keyframes segIn { from { opacity:0; transform: scale(.86); } to { opacity:1; transform:none; } }
 .seg-in { animation: segIn .45s cubic-bezier(.2,.8,.3,1) both; transform-origin: 126px 126px; }
@@ -559,12 +592,36 @@ const AUDIT = [
 const NICHES = ["Fitness", "Gastronomía", "Moda", "Inmobiliaria", "Belleza", "Finanzas personales", "Viajes", "Marca personal", "Tecnología", "Salud y bienestar"];
 
 const PLANS = [
-  { name: "Auditoría Express", price: "Gratis", per: "", cta: "Agendar gratis",
-    items: ["Diagnóstico completo de tu cuenta", "Tu mejor día y hora para publicar", "3 acciones de mejora priorizadas"] },
-  { name: "Crecimiento", price: "$59", per: "/mes", featured: true, cta: "Empezar ahora",
-    items: ["Todo lo de Auditoría Express", "Calendario mensual en horarios óptimos", "12 ideas con caption y hashtags", "Reporte de resultados cada mes"] },
-  { name: "Agencia Total", price: "$149", per: "/mes", cta: "Hablar con el equipo",
-    items: ["Todo lo de Crecimiento", "Contenido adaptado a todas tus plataformas", "Diseños listos para publicar", "Reunión de estrategia mensual"] },
+  { name: "Auditoría gratis", price: "Gratis", per: "", cta: "Agendar mi auditoría",
+    items: ["Diagnóstico completo de tu cuenta", "Tu mejor día y hora para publicar", "3 acciones de mejora priorizadas", "Llamada de 20 minutos conmigo"] },
+  { name: "Mentoría Pulso", price: "$497.000", per: " COP · 4 semanas", featured: true, badge: "Precio fundador", cta: "Quiero la mentoría",
+    items: [
+      "4 sesiones 1 a 1 de 60 min (una por semana)",
+      "Soporte por WhatsApp entre sesiones",
+      "Acceso a Pulso durante la mentoría",
+      "Tu calendario de contenido en PDF",
+      "Plan de 90 días al finalizar",
+    ] },
+  { name: "Gestión mensual", price: "A medida", per: "", cta: "Hablemos",
+    items: ["Yo creo y programo tu contenido", "Calendario publicado en tus horas pico", "Contenido adaptado a todas tus redes", "Reporte de resultados cada mes"] },
+];
+
+// ---------- casos de éxito reales ----------
+const CASES = [
+  {
+    name: "Marcela Dueñas",
+    business: "Pijamas Mundo de Sueños",
+    handle: "pijamas_mundo_de_suenos",
+    initials: "MD",
+    c1: "#5B3DF5", c2: "#FF4D6D",
+    quote: "Ver los números subir así me cambió la forma de trabajar mi Instagram. Ahora sé qué publicar y a qué hora, y se nota.",
+    metrics: [
+      { label: "Seguidores", from: "1.730", to: "6.812", delta: "+294%" },
+      { label: "Visualizaciones", from: "147", to: "47.532", delta: "×323" },
+    ],
+    // Sube tus capturas a la carpeta "public" del repo con este nombre para que aparezcan:
+    image: "/caso-marcela.jpg",
+  },
 ];
 
 // ---------- connected clients (demo) ----------
@@ -757,7 +814,7 @@ export default function Pulso() {
   const [lead, setLead] = useState(null);      // { plan } cuando el modal está abierto
   const [editing, setEditing] = useState(null); // evento en edición
 
-  const WHATSAPP = "573000000000"; // <-- cambia por tu número real (código país + número, sin +)
+  const WHATSAPP = "573136256707";
 
   // Banner tras volver del login de Instagram (?connected=ok&user=...)
   const [connectedInfo, setConnectedInfo] = useState(null);
@@ -782,6 +839,7 @@ export default function Pulso() {
     const connected = params.get("connected");
     if (connected === "ok") {
       setConnectedInfo({ ok: true, user: params.get("user") });
+      setView("panel");
       window.history.replaceState({}, "", window.location.pathname);
     } else if (connected === "error" || connected === "cancel") {
       setConnectedInfo({ ok: false });
@@ -896,15 +954,16 @@ export default function Pulso() {
           </div>
           <nav className="nav">
             <button className={view === "connect" ? "on" : ""} onClick={() => setView("connect")}>Inicio</button>
-            <button className={view === "dashboard" ? "on" : ""} onClick={() => setView("dashboard")}>Análisis</button>
+            <button className={view === "panel" || view === "dashboard" ? "on" : ""} onClick={() => setView("panel")}>Análisis</button>
             <button className={view === "generator" ? "on" : ""} onClick={() => setView("generator")}>Ideas</button>
             <button className={view === "calendar" ? "on" : ""} onClick={() => setView("calendar")}>Calendario</button>
           </nav>
           <button className="top-cta" onClick={() => openLead("Auditoría gratis")}>Auditoría gratis</button>
         </header>
 
-        {view === "connect" && <ConnectHub clients={clients} onConnect={() => setConnectOpen(true)} onSelect={selectClient} onCompetitor={analyzeCompetitor} openLead={openLead} connectedInfo={connectedInfo} onDismissBanner={() => setConnectedInfo(null)} />}
-        {view === "dashboard" && <Dashboard client={activeClient} mode={mode} goGen={() => setView("generator")} goCal={() => setView("calendar")} openLead={openLead} goConnect={() => setView("connect")} />}
+        {view === "connect" && <ConnectHub onConnect={() => setConnectOpen(true)} openLead={openLead} />}
+        {view === "panel" && <AgencyPanel clients={clients} onConnect={() => setConnectOpen(true)} onSelect={selectClient} onCompetitor={analyzeCompetitor} connectedInfo={connectedInfo} onDismissBanner={() => setConnectedInfo(null)} />}
+        {view === "dashboard" && <Dashboard client={activeClient} mode={mode} goGen={() => setView("generator")} goCal={() => setView("calendar")} openLead={openLead} goConnect={() => setView("panel")} goPanel={() => setView("panel")} />}
         {view === "generator" && <Generator scheduleIdea={scheduleIdea} goCal={() => setView("calendar")} openLead={openLead} accountProfile={accountProfile} analyzing={analyzing} activeClient={activeClient} mode={mode} />}
         {view === "calendar" && <Calendar events={events} addEvent={addEvent} removeEvent={removeEvent} fillOptimal={fillOptimal} clearAll={clearAll} onEdit={setEditing} openLead={openLead} user={activeClient?.handle} />}
 
@@ -1107,7 +1166,7 @@ function InstantAudit({ openLead, onConnect }) {
           <p>Con tus datos reales de Instagram sabrás tu hora exacta, tu alcance real y qué publicaciones te están funcionando de verdad.</p>
         </div>
         <div className="aud-cta-btns">
-          <button className="gen-btn" onClick={() => openLead("Auditoría Express")}>Quiero mi auditoría completa</button>
+          <button className="gen-btn" onClick={() => openLead("Auditoría gratis")}>Quiero mi auditoría completa</button>
           <button className="aud-2nd" onClick={onConnect}>Conectar Instagram</button>
         </div>
       </div>
@@ -1183,50 +1242,79 @@ function LiveDemo() {
   );
 }
 
-function ConnectHub({ clients, onConnect, onSelect, onCompetitor, openLead, connectedInfo, onDismissBanner }) {
+// ---------- casos de éxito ----------
+function SuccessCases({ openLead }) {
+  const [imgOk, setImgOk] = useState({});
+  return (
+    <div className="cases">
+      {CASES.map((c, i) => (
+        <div className="case" key={i}>
+          <div className="case-body">
+            <div className="case-who">
+              <div className="case-av" style={{ background: `linear-gradient(135deg, ${c.c1}, ${c.c2})` }}>{c.initials}</div>
+              <div>
+                <b>{c.name}</b>
+                <span className="case-biz">{c.business}</span>
+                <a className="case-ig" href={`https://instagram.com/${c.handle}`} target="_blank" rel="noreferrer">@{c.handle}</a>
+              </div>
+            </div>
+
+            <blockquote className="case-quote">{c.quote}</blockquote>
+
+            <div className="case-metrics">
+              {c.metrics.map((m, j) => (
+                <div className="case-metric" key={j}>
+                  <div className="cm-lab">{m.label}</div>
+                  <div className="cm-row">
+                    <span className="cm-from">{m.from}</span>
+                    <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M1 5h13M10 1l4 4-4 4" stroke="#6E6B78" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <span className="cm-to">{m.to}</span>
+                  </div>
+                  <span className="cm-delta">{m.delta}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {c.image && (
+            <div className={`case-proof ${imgOk[i] === false ? "hidden" : ""}`}>
+              <img src={c.image} alt={`Métricas reales de ${c.business}`} onError={() => setImgOk((p) => ({ ...p, [i]: false }))} />
+              <span className="case-proof-lab">Métricas reales de Instagram</span>
+            </div>
+          )}
+        </div>
+      ))}
+
+      <div className="cases-cta">
+        <div>
+          <b>¿Quieres resultados así en tu cuenta?</b>
+          <p>Empieza con una auditoría gratis y te digo qué está frenando tu Instagram.</p>
+        </div>
+        <button className="gen-btn" onClick={() => openLead("Mentoría Pulso")}>Quiero mis resultados</button>
+      </div>
+    </div>
+  );
+}
+
+// ---------- panel interno de agencia (pestaña Análisis) ----------
+function AgencyPanel({ clients, onConnect, onSelect, onCompetitor, connectedInfo, onDismissBanner }) {
   const [comp, setComp] = useState("");
   return (
     <>
       {connectedInfo && (
         <div className={`connect-banner ${connectedInfo.ok ? "ok" : "bad"}`}>
           <span>{connectedInfo.ok
-            ? `✓ ${connectedInfo.user ? "@" + connectedInfo.user : "Cuenta"} conectada correctamente. Ya aparece en tu lista.`
-            : "No se pudo completar la conexión. Inténtalo de nuevo."}</span>
-          <button onClick={onDismissBanner} aria-label="Cerrar">×</button>
+            ? `\u2713 ${connectedInfo.user ? "@" + connectedInfo.user : "Cuenta"} conectada correctamente. Ya aparece en tu lista.`
+            : "No se pudo completar la conexi\u00f3n. Int\u00e9ntalo de nuevo."}</span>
+          <button onClick={onDismissBanner} aria-label="Cerrar">\u00d7</button>
         </div>
       )}
-      <section className="hero">
-        <div className="hero-aurora"><i className="a1" /><i className="a2" /><i className="a3" /></div>
-        <div className="hero-grid">
-          <div className="hero-text">
-            <h1>Descubre en 30 segundos por qué tu Instagram <em className="grad-text">no crece</em>.</h1>
-            <p>Auditoría gratis e instantánea. Sin registrarte, sin conectar nada. Te decimos qué está frenando tu cuenta y qué cambiar esta semana.</p>
-
-            <InstantAudit openLead={openLead} onConnect={onConnect} />
-
-            <div className="pillars" style={{ marginTop: 26 }}>
-              <div className="pillar"><span className="pdot" style={{ background: "var(--coral)" }} /><div><b>Qué funciona</b><span>Formatos y posts que más rinden</span></div></div>
-              <div className="pillar"><span className="pdot" style={{ background: "var(--violet)" }} /><div><b>Cuándo publicar</b><span>Tu día y hora pico exactos</span></div></div>
-              <div className="pillar"><span className="pdot" style={{ background: "var(--teal)" }} /><div><b>Qué hacer para crecer</b><span>Estudio de mejoría accionable</span></div></div>
-            </div>
-          </div>
-
-          <div className="hero-visual">
-            <div className="glass hero-clockcard">
-              <div className="cc-lab">Mejor hora para publicar</div>
-              <RadialClock animate />
-            </div>
-            <div className="float-chip fc-1"><span className="fdot" style={{ background: "var(--teal)" }} /><CountUp to={86} prefix="+" suffix="% engagement" /></div>
-            <div className="float-chip fc-2"><span className="fdot" style={{ background: "var(--coral)" }} />Jueves 7 PM · pico</div>
-          </div>
-        </div>
-      </section>
-
-      <div className="section-h">Genera contenido con IA en vivo</div>
-      <LiveDemo />
-
-      <div className="section-h">Tus cuentas conectadas</div>
-      <div className="connect-cta" style={{ marginBottom: 18 }}>
+      <div className="panel-head">
+        <h1>Panel de agencia</h1>
+        <p>Administra todas las cuentas de tus clientes desde un solo lugar.</p>
+      </div>
+      <div className="section-h">Panel de agencia</div>
+      <div className="connect-cta" style={{ marginBottom: 22 }}>
         <button className="ig-connect" onClick={onConnect}>
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.3.07 1.69.07 4.9s0 3.6-.07 4.9c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.3.06-1.69.07-4.9.07s-3.6 0-4.9-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.21 8.8 2.2 12 2.2Zm0 3.2A6.6 6.6 0 1 0 18.6 12 6.6 6.6 0 0 0 12 5.4Zm0 10.9A4.3 4.3 0 1 1 16.3 12 4.3 4.3 0 0 1 12 16.3Zm6.85-11.2a1.54 1.54 0 1 0 1.55 1.54 1.54 1.54 0 0 0-1.55-1.54Z"/></svg>
           Conectar Instagram
@@ -1270,22 +1358,62 @@ function ConnectHub({ clients, onConnect, onSelect, onCompetitor, openLead, conn
         </div>
       </div>
 
+    </>
+  );
+}
+
+function ConnectHub({ onConnect, openLead }) {
+  return (
+    <>
+      <section className="hero">
+        <div className="hero-aurora"><i className="a1" /><i className="a2" /><i className="a3" /></div>
+        <div className="hero-grid">
+          <div className="hero-text">
+            <h1>Descubre en 30 segundos por qué tu Instagram <em className="grad-text">no crece</em>.</h1>
+            <p>Auditoría gratis e instantánea. Sin registrarte, sin conectar nada. Te decimos qué está frenando tu cuenta y qué cambiar esta semana.</p>
+
+            <InstantAudit openLead={openLead} onConnect={onConnect} />
+
+            <div className="pillars" style={{ marginTop: 26 }}>
+              <div className="pillar"><span className="pdot" style={{ background: "var(--coral)" }} /><div><b>Qué funciona</b><span>Formatos y posts que más rinden</span></div></div>
+              <div className="pillar"><span className="pdot" style={{ background: "var(--violet)" }} /><div><b>Cuándo publicar</b><span>Tu día y hora pico exactos</span></div></div>
+              <div className="pillar"><span className="pdot" style={{ background: "var(--teal)" }} /><div><b>Qué hacer para crecer</b><span>Estudio de mejoría accionable</span></div></div>
+            </div>
+          </div>
+
+          <div className="hero-visual">
+            <div className="glass hero-clockcard">
+              <div className="cc-lab">Mejor hora para publicar</div>
+              <RadialClock animate />
+            </div>
+            <div className="float-chip fc-1"><span className="fdot" style={{ background: "var(--teal)" }} /><CountUp to={86} prefix="+" suffix="% engagement" /></div>
+            <div className="float-chip fc-2"><span className="fdot" style={{ background: "var(--coral)" }} />Jueves 7 PM · pico</div>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-h">Genera contenido con IA en vivo</div>
+      <LiveDemo />
+
       <div className="section-h">Cómo funciona</div>
       <div className="steps">
-        <div className="step"><div className="sn">PASO 01</div><h4>Conecta la cuenta</h4><p>En un clic (o prueba con la cuenta demo). Sin instalar nada.</p></div>
-        <div className="step"><div className="sn">PASO 02</div><h4>Recibe el diagnóstico</h4><p>Mejor horario, qué formato rinde y un estudio de mejoría priorizado.</p></div>
-        <div className="step"><div className="sn">PASO 03</div><h4>Publica y crece</h4><p>Genera contenido optimizado y prográmalo en el calendario viral.</p></div>
+        <div className="step"><div className="sn">PASO 01</div><h4>Haz tu auditoría gratis</h4><p>Arriba, en 30 segundos. Sin registrarte ni conectar nada.</p></div>
+        <div className="step"><div className="sn">PASO 02</div><h4>Hablamos 20 minutos</h4><p>Reviso tu caso contigo y te digo si la mentoría es para ti. Sin compromiso.</p></div>
+        <div className="step"><div className="sn">PASO 03</div><h4>Trabajamos 4 semanas</h4><p>Sesiones 1 a 1, tu calendario armado y acompañamiento hasta ver resultados.</p></div>
       </div>
+
+      <div className="section-h">Resultados reales</div>
+      <SuccessCases openLead={openLead} />
 
       <section className="pricing">
         <div className="pricing-h">
           <h2>Elige cómo quieres crecer</h2>
-          <p>Empieza gratis con una auditoría. Sin permanencia.</p>
+          <p>Empieza con una auditoría gratis. Sin compromiso.</p>
         </div>
         <div className="plans">
           {PLANS.map((pl) => (
             <div className={`plan ${pl.featured ? "featured" : ""}`} key={pl.name}>
-              {pl.featured && <span className="badge">Más elegido</span>}
+              {pl.featured && <span className="badge">{pl.badge || "Más elegido"}</span>}
               <h3>{pl.name}</h3>
               <div className="price">{pl.price}<em>{pl.per}</em></div>
               <ul>{pl.items.map((it, i) => <li key={i}>{it}</li>)}</ul>
@@ -1297,23 +1425,24 @@ function ConnectHub({ clients, onConnect, onSelect, onCompetitor, openLead, conn
 
       <section className="ctaband">
         <div>
-          <h2>¿Listo para volver <em>virales</em> a tus clientes?</h2>
-          <p>Agenda una auditoría gratis y te mostramos exactamente qué cambiar esta semana.</p>
+          <h2>Tu Instagram puede crecer <em>como el de Marcela</em>.</h2>
+          <p>Empieza con la auditoría gratis. Si te sirve lo que ves, hablamos de la mentoría.</p>
         </div>
-        <button className="big" onClick={() => openLead("Auditoría gratis")}>Quiero mi auditoría gratis</button>
+        <button className="big" onClick={() => openLead("Auditoría gratis")}>Agendar mi auditoría gratis</button>
       </section>
     </>
   );
 }
 
 // ---------- dashboard ----------
-function Dashboard({ client, mode, goGen, goCal, openLead, goConnect }) {
+function Dashboard({ client, mode, goGen, goCal, openLead, goConnect, goPanel }) {
   const maxDay = Math.max(...DAYS.map((d) => d.v));
   const cl = client || { name: "Cuenta", handle: "cuenta", initials: "CU", c1: "#5B3DF5", c2: "#FF4D6D" };
   const isComp = mode === "competitor";
 
   return (
     <>
+      {goPanel && <button className="back-panel" onClick={goPanel}>← Volver al panel</button>}
       {isComp ? (
         <div className="demo-flag" style={{ background: "#EFEBFF", color: "#3a2a8a" }}>🔍 <b>Modo competencia</b> — datos públicos limitados (Business Discovery)</div>
       ) : (
@@ -1409,7 +1538,7 @@ function OwnerView({ cl, maxDay, goGen, goCal, openLead }) {
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 22 }}>
           <button className="gen-btn" onClick={goGen}>Generar contenido →</button>
           <button className="gen-btn" style={{ background: "var(--ink)" }} onClick={goCal}>Abrir calendario →</button>
-          <button className="sched-btn" onClick={() => openLead("Crecimiento")}>Quiero que lo hagan por mí</button>
+          <button className="sched-btn" onClick={() => openLead("Gestión mensual")}>Quiero que lo hagan por mí</button>
         </div>
       </div>
     </>
@@ -1447,7 +1576,7 @@ function CompetitorView({ cl, goConnect, openLead }) {
         <p>El mejor horario, la demografía de audiencia, el alcance real y el estudio de mejoría solo están disponibles para cuentas que conectan con Pulso. Meta no permite ver estos datos de cuentas ajenas.</p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 18 }}>
           <button className="gen-btn" onClick={goConnect}>Conectar una cuenta →</button>
-          <button className="sched-btn" onClick={() => openLead("Crecimiento")}>Conviértela en cliente</button>
+          <button className="sched-btn" onClick={() => openLead("Gestión mensual")}>Conviértela en cliente</button>
         </div>
       </div>
       <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 12 }}>* El engagement de competencia es una estimación a partir de datos públicos, no una métrica oficial de Meta.</p>
@@ -1633,7 +1762,7 @@ Las ideas deben ser específicas y accionables, no genéricas. Varía los format
               <h2>¿Prefieres que lo <em>creemos y programemos</em> por ti?</h2>
               <p>Nuestro equipo produce el contenido y lo deja listo en el calendario cada semana.</p>
             </div>
-            <button className="big" onClick={() => openLead("Crecimiento")}>Hacer que lo hagan por mí</button>
+            <button className="big" onClick={() => openLead("Gestión mensual")}>Quiero que lo hagan por mí</button>
           </section>
         </>
       )}
@@ -1874,7 +2003,7 @@ function Calendar({ events, addEvent, removeEvent, fillOptimal, clearAll, onEdit
           <h2>Deja que Pulso llene tu calendario <em>cada semana</em></h2>
           <p>Contenido creado y programado por nosotros en tus horarios pico. Tú solo apruebas.</p>
         </div>
-        <button className="big" onClick={() => openLead("Agencia Total")}>Quiero mi calendario listo</button>
+        <button className="big" onClick={() => openLead("Gestión mensual")}>Quiero mi calendario listo</button>
       </section>
     </>
   );
@@ -1913,7 +2042,7 @@ function LeadModal({ lead, onClose, whatsapp }) {
   const [sent, setSent] = useState(false);
 
   const valid = name.trim() && contact.trim();
-  const waText = encodeURIComponent(`Hola, soy ${name || "(nombre)"}. Me interesa el plan "${plan}" de Pulso. Mi Instagram: @${ig || "(usuario)"}. Contacto: ${contact}`);
+  const waText = encodeURIComponent(`Hola, soy ${name || "(nombre)"}. Me interesa "${plan}" de Pulso. Mi Instagram: @${ig || "(usuario)"}. Contacto: ${contact}`);
 
   function submit() {
     if (!valid) return;
@@ -1927,8 +2056,8 @@ function LeadModal({ lead, onClose, whatsapp }) {
         <button className="close" onClick={onClose} aria-label="Cerrar">×</button>
         {!sent ? (
           <>
-            <h3>Solicita tu {plan.toLowerCase().includes("auditor") ? "auditoría gratis" : "plan"}</h3>
-            <p className="sub">Déjanos tus datos y te contactamos para empezar. Sin compromiso.</p>
+            <h3>{plan.toLowerCase().includes("auditor") ? "Agenda tu auditoría gratis" : plan.toLowerCase().includes("mentor") ? "Solicita la mentoría" : "Hablemos de tu cuenta"}</h3>
+            <p className="sub">Déjame tus datos y te contacto para empezar. Sin compromiso.</p>
             <span className="plan-tag">Plan: {plan}</span>
             <div className="form">
               <div><label>Tu nombre</label><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre y apellido" /></div>
@@ -1950,7 +2079,7 @@ function LeadModal({ lead, onClose, whatsapp }) {
           <div className="sent">
             <div className="big-check">✓</div>
             <h4>¡Solicitud recibida!</h4>
-            <p>Gracias, {name.split(" ")[0]}. Te contactaremos muy pronto para tu plan <b>{plan}</b>. Si quieres agilizar, escríbenos ahora por WhatsApp.</p>
+            <p>Gracias, {name.split(" ")[0]}. Te contacto muy pronto por <b>{plan}</b>. Si quieres agilizar, escríbeme ahora por WhatsApp.</p>
             <a className="send" style={{ background: "#25D366", textAlign: "center", textDecoration: "none", display: "block", marginTop: 16 }} href={`https://wa.me/${whatsapp}?text=${waText}`} target="_blank" rel="noreferrer">Abrir WhatsApp</a>
           </div>
         )}
