@@ -611,7 +611,7 @@ const CASES = [
   {
     name: "Marcela Dueñas",
     business: "Pijamas Mundo de Sueños",
-    handle: "pijamas_mundo_de_suenos",
+    handle: "pijamas_mundo_de__suenos",
     initials: "MD",
     c1: "#5B3DF5", c2: "#FF4D6D",
     quote: "Ver los números subir así me cambió la forma de trabajar mi Instagram. Ahora sé qué publicar y a qué hora, y se nota.",
@@ -1255,7 +1255,7 @@ function SuccessCases({ openLead }) {
               <div>
                 <b>{c.name}</b>
                 <span className="case-biz">{c.business}</span>
-                <a className="case-ig" href={`https://instagram.com/${c.handle}`} target="_blank" rel="noreferrer">@{c.handle}</a>
+                <a className="case-ig" href={`https://instagram.com/${c.handle}`} target="_blank" rel="noopener noreferrer">@{c.handle} ↗</a>
               </div>
             </div>
 
